@@ -1,0 +1,14 @@
+Amino acids with a hydrophobic side chain: Alanine, Valine, Isoleucine, Leucine, Methionine, Phenylalanine, Tyrosine, Tryptophan
+(Tyrosine is referred sometimes as polar uncharged)
+
+Polar uncharged amino acids: Serine, Threonine, Asparagine, Glutamine
+
+Amino acids with positively charged side chain: Arginine, Histidine, Lysine
+Amino acids with negatively charged side chain: Aspartic acid, Glutamic acid
+
+Amino acids that are considered special cases: Cysteine, Selenocysteine*, Glycine, Proline
+(Glycine and Proline referred sometimes as hydrophobic)
+
+*Selenocysteine is a rare amino acid not directly encoded by DNA, but is incorporated into proteins via the ribosome. Selenocysteine is an analogue of the more common Cysteine with selenium in place of the sulfur. Selenocysteine has a lower redox potential compared to the similar Cysteine, and participates in several unique enzymatic reactions. Cysteine occurs in all three domains of life, including important enzymes present in humans.
+
+Another amino acid not encoded in DNA, but synthesized into protein by ribosomes is Pyrrolysine. Pyrrolysine is found in archaeal species where it participates in the catalytic activity of several methyltransferases (a large group of enzymes that methylate their substrates, that means to add to them a methyl group).

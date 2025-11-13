@@ -1,0 +1,17 @@
+This is an example text with Russian characters for testing the app
+Some kind of geroprotector
+Какой-то геропротектор
+Below are empty lines:
+
+
+007 1/2
+Some kind of geroprotector
+Some kind of geroprotector
+Какой-то геропротектор
+NMN
+Слабоумие и отвага
+Слабоумие и отвага
+007 1/2
+Lysosome
+007 1/2
+The primary responsibility of lysosomes is catabolic degradation of proteins, polysaccharides and lipids into their respective building-block molecules: amino acids, monosaccharides, and free fatty acids.

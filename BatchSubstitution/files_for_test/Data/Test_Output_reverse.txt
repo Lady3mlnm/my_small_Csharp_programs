@@ -1,0 +1,14 @@
+Amino acids with a hydrophobic side chain: Ala, Val, Ile, Leu, Met, Phe, Tyr, Trp
+(Tyr is referred sometimes as polar uncharged)
+
+Polar uncharged amino acids: Ser, Thr, Asn, Gln
+
+Amino acids with positively charged side chain: Arg, His, Lys
+Amino acids with negatively charged side chain: Asp, Glu
+
+Amino acids that are considered special cases: Cys, Sec*, Gly, Pro
+(Gly and Pro referred sometimes as hydrophobic)
+
+*Sec is a rare amino acid not directly encoded by DNA, but is incorporated into proteins via the ribosome. Sec is an analogue of the more common Cys with selenium in place of the sulfur. Sec has a lower redox potential compared to the similar Cys, and participates in several unique enzymatic reactions. Cys occurs in all three domains of life, including important enzymes present in humans.
+
+Another amino acid not encoded in DNA, but synthesized into protein by ribosomes is Pyl. Pyl is found in archaeal species where it participates in the catalytic activity of several methyltransferases (a large group of enzymes that methylate their substrates, that means to add to them a methyl group).

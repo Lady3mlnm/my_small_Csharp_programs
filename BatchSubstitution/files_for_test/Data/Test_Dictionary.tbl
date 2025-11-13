@@ -1,0 +1,37 @@
+// It is possible to leave comments in the dictionary file.
+// The comments can be made in free form with only limitation that they should not contain the separator.
+// In other words, all strings that don't containe the separator are ignored. Strings with the separarot are interpreted as key-value pair.
+
+    — Hydrophobic Amino Acids —
+Ala = Alanine
+Val = Valine
+Ile = Isoleucine
+Leu = Leucine
+Met = Methionine
+Phe = Phenylalanine
+Tyr = Tyrosine
+Trp = Tryptophan
+
+    — Polar Uncharged Amino Acids —
+Ser = Serine
+Thr = Threonine
+Asn = Asparagine
+Gln = Glutamine
+
+    — Special Amino Acids —
+Cys = Cysteine
+Gly = Glycine
+Pro = Proline
+
+    — Charged Positively Amino Acids —
+Arg = Arginine
+His = Histidine
+Lys = Lysine
+
+    — Charged Negatively Amino Acids —
+Asp = Aspartic acid
+Glu = Glutamic acid
+
+    — Additional amino acids that can be incorporated by special translation mechanisms —
+Sec = Selenocysteine
+Pyl = Pyrrolysine
