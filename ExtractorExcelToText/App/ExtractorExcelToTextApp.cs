@@ -1,4 +1,5 @@
-﻿using ExtractorExcelToText.DataAccess;
+﻿using ClosedXML.Excel;
+using ExtractorExcelToText.DataAccess;
 using ExtractorExcelToText.DataStructures;
 using System.Diagnostics;
 using System.Text;
@@ -46,9 +47,11 @@ public class ExtractorExcelToTextApp
         } else
             throw new ArgumentException("Unsupported global mode: " + appMode);
 
-        IEnumerable<Record> records = appMode switch {
-                AppMode.extractOneColumn => _repository.ReadExcelColumn(pathInputExcel, sheetName, columnPositions, columnTexts, rowRange, cellIgnoringMark),
-                AppMode.combineTwoColumns => _repository.ReadExcelTwoColumnsCombined(pathInputExcel, sheetName, columnPositions, columnTexts, columnTextsOverlay, rowRange, cellIgnoringMark),
+
+        XLWorkbook workbook = _repository.GetXLWorkbook(pathInputExcel);
+        IOrderedEnumerable<Record> records = appMode switch {
+                AppMode.extractOneColumn => _repository.ReadExcelColumn(ref workbook, sheetName, columnPositions, columnTexts, rowRange, cellIgnoringMark),
+                AppMode.combineTwoColumns => _repository.ReadExcelTwoColumnsCombined(ref workbook, sheetName, columnPositions, columnTexts, columnTextsOverlay, rowRange, cellIgnoringMark),
                 _ => throw new ArgumentException("Unsupported mode: " + appMode)
         };
 
@@ -57,7 +60,6 @@ public class ExtractorExcelToTextApp
         var examplesOfRecords = records.Take(Math.Min(5, records.Count()))
                                        .Select(record => record.ToString());
         _userInteraction.ShowMessage(examplesOfRecords, ConsoleColor.Cyan);
-
 
         string[] stringsReady = [];
         if(writingMode == WritingMode.modeCreateNew) {

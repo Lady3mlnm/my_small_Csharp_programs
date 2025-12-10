@@ -4,27 +4,27 @@ namespace ExtractorExcelToText.App;
 
 public class ConversionLogic
 {
-    public string[] RecordsToArrayOfString(IEnumerable<Record> records)
+    public string[] RecordsToArrayOfString(IOrderedEnumerable<Record> recordsOrdered)
     {
-        int numberOfStrings = records.Select(record => record.Position).Max();
+        int numberOfStrings = recordsOrdered.Last().Position;
 
         string[] stringsReady = new string[numberOfStrings];
-        foreach (Record record in records)
+        foreach (Record record in recordsOrdered)
             stringsReady[record.Position - 1] = record.Text;
 
         return stringsReady;
     }
 
 
-    public string[] OverlayRecordsToArrayOfString(string[] initialTexts, IEnumerable<Record> records)
+    public string[] OverlayRecordsToArrayOfString(string[] initialTexts, IOrderedEnumerable<Record> recordsOrdered)
     {
         int numberOfStrings = Math.Max(initialTexts.Length,
-                                       records.Select(record => record.Position).Max());
+                                       recordsOrdered.Last().Position);
 
         if(numberOfStrings > initialTexts.Length)
             Array.Resize(ref initialTexts, numberOfStrings);
 
-        foreach(Record record in records)
+        foreach(Record record in recordsOrdered)
             initialTexts[record.Position - 1] = record.Text;
 
         return initialTexts;

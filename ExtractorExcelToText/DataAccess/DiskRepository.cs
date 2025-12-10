@@ -6,12 +6,17 @@ namespace ExtractorExcelToText.DataAccess;
 
 internal class DiskRepository : IRepository
 {
-    public Record[] ReadExcelColumn(string pathInputExcel, string sheetName, string columnPositions, string columnTexts, string rowRange, string? cellIgnoringMark = "")
+    public XLWorkbook GetXLWorkbook(string pathInputExcel)
     {
         if(!File.Exists(pathInputExcel))
             throw new FileNotFoundException($"\nFile with name '{pathInputExcel}'\n({Path.GetFullPath(pathInputExcel)})\ndoes not exist");
 
-        using var workbook = new XLWorkbook(pathInputExcel);
+        return new XLWorkbook(pathInputExcel);
+    }
+
+
+    public IOrderedEnumerable<Record> ReadExcelColumn(ref XLWorkbook workbook, string sheetName, string columnPositions, string columnTexts, string rowRange, string? cellIgnoringMark = "")
+    {
         var worksheet = workbook.Worksheet(sheetName);
 
         var rowBeginEndPositions = rowRange.Split(":");
@@ -28,17 +33,12 @@ internal class DiskRepository : IRepository
 
         return ieIds.Zip(ieTexts, (id, st) => new Record(id, st))
                     .Where(record => record.Text != cellIgnoringMark)
-                    .OrderBy(record => record.Position)
-                    .ToArray();                         // IOrderedEnumerable<Record> is not easy to pass from the method,
-    }                                                   // since after its completion the 'XLWorksheetInternals' object becomes disposed.
+                    .OrderBy(record => record.Position);
+    }
 
 
-    Record[] IRepository.ReadExcelTwoColumnsCombined(string pathInputExcel, string sheetName, string columnPositions, string columnTexts, string columnOverlay, string rowRange, string? cellIgnoringMark)
+    public IOrderedEnumerable<Record> ReadExcelTwoColumnsCombined(ref XLWorkbook workbook, string sheetName, string columnPositions, string columnTexts, string columnOverlay, string rowRange, string? cellIgnoringMark)
     {
-        if(!File.Exists(pathInputExcel))
-            throw new FileNotFoundException($"\nFile with name '{pathInputExcel}'\n({Path.GetFullPath(pathInputExcel)})\ndoes not exist");
-
-        using var workbook = new XLWorkbook(pathInputExcel);
         var worksheet = workbook.Worksheet(sheetName);
 
         var rowBeginEndPositions = rowRange.Split(":");
@@ -59,9 +59,8 @@ internal class DiskRepository : IRepository
         return ieTexts.Zip(ieOverlaps, (stOriginal, stOverlap) => (stOverlap == cellIgnoringMark) ? stOriginal : stOverlap)
                       .Zip(ieIds, (st, id) => new Record(id, st))
                       .Where(record => record.Text != cellIgnoringMark)
-                      .OrderBy(record => record.Position)
-                      .ToArray();                         // IOrderedEnumerable<Record> is not easy to pass from the method,
-    }                                                     // since after its completion the 'XLWorksheetInternals' object becomes disposed.
+                      .OrderBy(record => record.Position);
+    }
 
 
     public string[] ReadTxt(string pathInputText, Encoding encoding)
