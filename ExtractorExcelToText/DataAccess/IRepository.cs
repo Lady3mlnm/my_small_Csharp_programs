@@ -10,5 +10,5 @@ public interface IRepository
     IOrderedEnumerable<Record> ReadExcelColumn(ref XLWorkbook workbook, string sheetName, string columnPositions, string columnTexts, string rowRange, string? cellIgnoringMark);
     IOrderedEnumerable<Record> ReadExcelTwoColumnsCombined(ref XLWorkbook workbook, string sheetName, string columnPositions, string columnTexts, string columnOverlay, string rowRange, string? cellIgnoringMark);
     string[] ReadTxt(string pathInputText, Encoding encoding);
-    void WriteArrayToRepository(string filePath, string[] stringsReady, bool addEmptyLineToEnd, Encoding encoding);
+    void WriteArrayToRepository(string filePath, string[] stringsReady, Encoding encoding);
 }

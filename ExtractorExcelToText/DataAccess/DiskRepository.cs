@@ -73,13 +73,12 @@ internal class DiskRepository : IRepository
     }
 
 
-    public void WriteArrayToRepository(string filePath, string[] stringsReady, bool addEmptyLineToEnd, Encoding encoding)
+    public void WriteArrayToRepository(string filePath, string[] stringsReady, Encoding encoding)
     {
-        File.WriteAllText(filePath,
-                          string.Join(Environment.NewLine, stringsReady) + (addEmptyLineToEnd ? Environment.NewLine : null),
-                          encoding);
-        //File.WriteAllLines(filePath,
-        //                   stringsReady,
-        //                   encoding);  // but this way always creates empty line at the end of the file
+        File.WriteAllLines(filePath, stringsReady, encoding);    // This way always creates empty line at the end of the file
+
+        //File.WriteAllText(filePath,
+        //                  string.Join(Environment.NewLine, stringsReady) + (addEmptyLineToEnd ? Environment.NewLine : null),
+        //                  encoding);
     }
 }
