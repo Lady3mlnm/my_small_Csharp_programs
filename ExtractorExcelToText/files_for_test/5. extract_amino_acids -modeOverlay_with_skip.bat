@@ -3,4 +3,4 @@
 
 copy Data\Test_base.txt Data\Test_Output.txt
 
-start ExtractorExcelToText.exe extractOneColumn Data\Test_Excel.xlsx "Amino Acids" A H "2:24" "" modeOverlay Data\Test_Output.txt default
+start ExtractorExcelToText.exe extractOneColumn Data\Test_Excel.xlsx "Amino Acids" A H "2:24" "" modeOverlay Data\Test_Output.txt true default

@@ -31,6 +31,7 @@ public class ExtractorExcelToTextApp
         string? cellIgnoringMark;
         WritingMode writingMode;
         string pathTxt;
+        bool addEmptyLineToEnd;
         Encoding encoding;
 
         bool testMode = false;
@@ -38,10 +39,10 @@ public class ExtractorExcelToTextApp
         Stopwatch stopwatch = Stopwatch.StartNew();
 
         if(appMode == AppMode.extractOneColumn) {
-            (pathInputExcel, sheetName, columnPositions, columnTexts, rowRange, cellIgnoringMark, writingMode, pathTxt, encoding) =
+            (pathInputExcel, sheetName, columnPositions, columnTexts, rowRange, cellIgnoringMark, writingMode, pathTxt, addEmptyLineToEnd, encoding) =
                 _userInteraction.GetParametersForModeExtractOneColumn();
         } else if(appMode == AppMode.combineTwoColumns) {
-            (pathInputExcel, sheetName, columnPositions, columnTexts, columnTextsOverlay, rowRange, cellIgnoringMark, writingMode, pathTxt, encoding) =
+            (pathInputExcel, sheetName, columnPositions, columnTexts, columnTextsOverlay, rowRange, cellIgnoringMark, writingMode, pathTxt, addEmptyLineToEnd, encoding) =
                 _userInteraction.GetParametersForModeCombineTwoColumns();
         } else
             throw new ArgumentException("Unsupported global mode: " + appMode);
@@ -83,7 +84,7 @@ public class ExtractorExcelToTextApp
         if(testMode)
             _userInteraction.ShowMessage($"The app is in the test mode: no writing the output file.", ConsoleColor.Red);
         else
-            _repository.WriteArrayToRepository(pathTxt, stringsReady, encoding);
+            _repository.WriteArrayToRepository(pathTxt, stringsReady, addEmptyLineToEnd, encoding);
 
         _userInteraction.ShowMessage('\n' + "The app completed its work.");
 

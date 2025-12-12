@@ -15,6 +15,7 @@ public class ConsoleUserInteraction : IUserInteraction
     private string? _cellIgnoringMark = "";
     private WritingMode _writingMode = WritingMode.modeOverlay;  // WritingMode.modeCreateNew / WritingMode.modeOverlay;
     private string _pathTxt = @"Data\Test_Output.txt";
+    private Boolean _addEmptyLineToEnd = true;
     private Encoding _encoding = Encoding.Default;
 
     public ConsoleUserInteraction(string[] args, string appTitle = "ExtractorExcelToText")
@@ -105,12 +106,24 @@ public class ConsoleUserInteraction : IUserInteraction
         }
 
         try {
+            _addEmptyLineToEnd = bool.Parse(args[++parameterCount]);
+            ShowMessage(@"Add an additional empty line to the end of the file?: " + _addEmptyLineToEnd, ConsoleColor.Green);
+        } catch(IndexOutOfRangeException) {
+            ShowMessage(@"Parameter whether to add an additional empty line to the end is not given. Used default: " + _addEmptyLineToEnd, ConsoleColor.Red);
+        }
+
+        try {
             string stEncoding = args[++parameterCount];
             if(stEncoding is "default" or "-" or "auto" or "0" or "defaultEncoding") {
                 _encoding = Encoding.Default;
                 ShowMessage($"Encoding for the text file: {stEncoding} => the application will used default encoding ({_encoding})", ConsoleColor.Green);
             } else {
-                _encoding = Encoding.GetEncoding(stEncoding);
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                int codingAsInt;
+                if(int.TryParse(stEncoding, out codingAsInt))           // make shorter
+                    _encoding = Encoding.GetEncoding(codingAsInt);
+                else
+                    _encoding = Encoding.GetEncoding(stEncoding);
                 ShowMessage($"Encoding for the text file: {stEncoding} => {_encoding}", ConsoleColor.Green);
             }
         } catch(IndexOutOfRangeException) {
@@ -125,15 +138,15 @@ public class ConsoleUserInteraction : IUserInteraction
 
 
     public (string pathInputExcel, string sheetName, string columnPositions, string columnTexts, string rowRange, string? cellIgnoringMark,
-        WritingMode writingMode, string pathTxt, Encoding encoding)
+        WritingMode writingMode, string pathTxt, bool addEmptyLineToEnd, Encoding encoding)
         GetParametersForModeExtractOneColumn() =>
-        (_pathInputExcel, _sheetName, _columnPositions, _columnTexts, _rowRange, _cellIgnoringMark, _writingMode, _pathTxt, _encoding);
+        (_pathInputExcel, _sheetName, _columnPositions, _columnTexts, _rowRange, _cellIgnoringMark, _writingMode, _pathTxt, _addEmptyLineToEnd, _encoding);
 
 
     public (string pathInputExcel, string sheetName, string columnPositions, string columnTexts, string columnTextsOverlay, string rowRange, string? cellIgnoringMark,
-        WritingMode writingMode, string pathTxt, Encoding encoding)
+        WritingMode writingMode, string pathTxt, bool addEmptyLineToEnd, Encoding encoding)
         GetParametersForModeCombineTwoColumns() =>
-        (_pathInputExcel, _sheetName, _columnPositions, _columnTexts, _columnTextsOverlay, _rowRange, _cellIgnoringMark, _writingMode, _pathTxt, _encoding);
+        (_pathInputExcel, _sheetName, _columnPositions, _columnTexts, _columnTextsOverlay, _rowRange, _cellIgnoringMark, _writingMode, _pathTxt, _addEmptyLineToEnd, _encoding);
 
 
     public void ShowMessage(string message, bool isLinebreakAdded = true)
