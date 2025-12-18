@@ -5,131 +5,134 @@ namespace ExtractorExcelToText.App;
 
 public class ConsoleUserInteraction : IUserInteraction
 {
-    private AppMode _appMode = AppMode.combineTwoColumns;   //  AppMode.extractOneColumn / AppMode.combineTwoColumns
+    private AppMode _appMode = AppMode.extractOneColumn;   //  AppMode.extractOneColumn / AppMode.combineTwoColumns
     private string _pathInputExcel = @"Data\Test_Excel.xlsx";
     private string _sheetName = "Amino Acids";  // "TestSheet"
     private string _columnPositions = "auto";         // "auto" / "A"
-    private string _columnTexts = "B";
+    private string _columnTexts = "C";
     private string _columnTextsOverlay = "H";   // "C"
-    private string _rowRange = "2:24";          // "2:11"
+    private string _rowRange = "3:5,10,14:16";  //"2:24";          // "2:11"
     private string? _cellIgnoringMark = "";
-    private WritingMode _writingMode = WritingMode.modeOverlay;  // WritingMode.modeCreateNew / WritingMode.modeOverlay;
+    private WritingMode _writingMode = WritingMode.modeCreateNew;  // WritingMode.modeCreateNew / WritingMode.modeOverlay;
     private string _pathTxt = @"Data\Test_Output.txt";
-    private Boolean _addEmptyLineToEnd = true;
+    private bool _emptyLineAtEnd = true;
     private Encoding _encoding = Encoding.Default;
+
+
+    static Dictionary<string, string> ParseArguments(string[] args)
+    {
+        var dict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach(var arg in args) {
+            var parts = arg.Split('=', 2);
+            var key = parts[0].TrimStart('-', '/');
+            var value = (parts.Length > 1) ? parts[1] : "true";   // for flags like --verbose
+            dict[key] = value;
+        }
+
+        return dict;
+    }
+
 
     public ConsoleUserInteraction(string[] args, string appTitle = "ExtractorExcelToText")
     {
         Console.Title = appTitle;
 
-        try {
-            _appMode = (AppMode)Enum.Parse(typeof(AppMode), args[0]);
+        var options = ParseArguments(args);
+
+        if(options.TryGetValue("appMode", out var appMode)) {
+            _appMode = (AppMode)Enum.Parse(typeof(AppMode), appMode);
             ShowMessage("Global mode of the application: " + _appMode, ConsoleColor.Green);
-        } catch(IndexOutOfRangeException) {
+        } else
             ShowMessage("Global mode of the application is not given. Used default: " + _appMode, ConsoleColor.Red);
-        }
 
-        try {
-            _pathInputExcel = args[1];
+        if(options.TryGetValue("pathInputExcel", out var pathInputExcel)) {
+            _pathInputExcel = pathInputExcel;
             ShowMessage("Name of Excel file: " + _pathInputExcel, ConsoleColor.Green);
-        } catch(IndexOutOfRangeException) {
+        } else
             ShowMessage("Name of Excel file is not given. Used default: " + _pathInputExcel, ConsoleColor.Red);
-        }
 
-        try {
-            _sheetName = args[2];
+        if(options.TryGetValue("sheetName", out var sheetName)) {
+            _sheetName = sheetName;
             ShowMessage("Name of sheet in the Excel file: " + _sheetName, ConsoleColor.Green);
-        } catch(IndexOutOfRangeException) {
+        } else
             ShowMessage("Name of sheet in the Excel file is not given. Used default: " + _sheetName, ConsoleColor.Red);
-        }
 
-        try {
-            _columnPositions = args[3];
-            if (_columnPositions is "auto" or "-" or "default" or "autoNumbering") {
-                ShowMessage($"Column with string positions: {_columnPositions} => the application will use auto-numbering", ConsoleColor.Green);
+        if(options.TryGetValue("columnPositions", out var columnPositions)) {
+            if(columnPositions is "auto" or "-" or "autoNumbering" or "auto-numbering" or "default") {
+                ShowMessage($"Column with string positions: {columnPositions} => the application will use auto-numbering", ConsoleColor.Green);
                 _columnPositions = "auto";
-            } else
+            } else {
+                _columnPositions = columnPositions;
                 ShowMessage("Column with ids: " + _columnPositions, ConsoleColor.Green);
-        } catch(IndexOutOfRangeException) {
-            ShowMessage("Column with string positions is not given. The application will use auto-numbering.", ConsoleColor.Red);
-        }
+            }
+        } else
+            ShowMessage("Column with string positions is not given. Used default: " + _columnPositions, ConsoleColor.Red);
 
         string refinementOfPhrase = (_appMode == AppMode.combineTwoColumns) ? "original" : "extracted";
-        try {
-            _columnTexts = args[4];
+        if(options.TryGetValue("columnTexts", out var columnTexts)) {
+            _columnTexts = columnTexts;
             ShowMessage($"Column with {refinementOfPhrase} texts: {_columnTexts}", ConsoleColor.Green);
-        } catch(IndexOutOfRangeException) {
+        } else
             ShowMessage($"Column with {refinementOfPhrase} texts is not given. Used default: {_columnTexts}", ConsoleColor.Red);
-        }
 
-        int parameterCount = 4;
         if(_appMode == AppMode.combineTwoColumns) {
-            try {
-                _columnTextsOverlay = args[++parameterCount];
+            if(options.TryGetValue("columnTextsOverlay", out var columnTextsOverlay)) {
+                _columnTextsOverlay = columnTextsOverlay;
                 ShowMessage("Column with overlay texts: " + _columnTextsOverlay, ConsoleColor.Green);
-            } catch(IndexOutOfRangeException) {
-                ShowMessage("Column with overlay texts is not given. Used default: " + _columnTextsOverlay, ConsoleColor.Red);
-            }
-        }
-
-        try {
-            _rowRange = args[++parameterCount];
-            ShowMessage("Range of rows to process: " + _rowRange, ConsoleColor.Green);
-        } catch(IndexOutOfRangeException) {
-            ShowMessage("Range of rows is not given. Used default: " + _rowRange, ConsoleColor.Red);
-        }
-
-        try {
-            _cellIgnoringMark = args[++parameterCount];
-            if(_cellIgnoringMark == "doNotUseCellIgnoring") {
-                ShowMessage($"Parameter '{_cellIgnoringMark}' => Option for ignoring of cells with certain contents will not be used", ConsoleColor.Green);
-                _cellIgnoringMark = null;
             } else
-                ShowMessage($"The contents of a cell indicating that the cell has to be ignored: >{_cellIgnoringMark}<", ConsoleColor.Green);
-        } catch(IndexOutOfRangeException) {
-            ShowMessage($"The contents of a cell indicating that the cell has to be ignored is not given. Used default: >{_cellIgnoringMark}<", ConsoleColor.Red);
+                ShowMessage("Column with overlay texts is not given. Used default: " + _columnTextsOverlay, ConsoleColor.Red);
         }
 
-        try {
-            _writingMode = (WritingMode)Enum.Parse(typeof(WritingMode), args[++parameterCount]);
+        if(options.TryGetValue("rowRange", out var rowRange)) {
+            _rowRange = rowRange;
+            ShowMessage("Range of rows to process: " + _rowRange, ConsoleColor.Green);
+        } else
+            ShowMessage("Range of rows is not given. Used default: " + _rowRange, ConsoleColor.Red);
+
+        if(options.TryGetValue("cellIgnoringMark", out var cellIgnoringMark)) {
+            if(_cellIgnoringMark == "doNotUseCellIgnoring") {
+                ShowMessage($"Parameter '{cellIgnoringMark}' => Option for ignoring of cells with certain contents will not be used", ConsoleColor.Green);
+                _cellIgnoringMark = null;
+            } else {
+                _cellIgnoringMark = cellIgnoringMark;
+                ShowMessage($"The contents of a cell indicating that the cell has to be ignored: >{_cellIgnoringMark}<", ConsoleColor.Green);
+            }
+        } else
+            ShowMessage($"The contents of a cell indicating that the cell has to be ignored is not given. Used default: >{_cellIgnoringMark}<", ConsoleColor.Red);
+
+        if(options.TryGetValue("writingMode", out var writingMode)) {
+            _writingMode = (WritingMode)Enum.Parse(typeof(WritingMode), writingMode);
             ShowMessage("Writng mode: " + _writingMode, ConsoleColor.Green);
-        } catch(IndexOutOfRangeException) {
+        } else
             ShowMessage("Writng mode is not given. Used default: " + _writingMode, ConsoleColor.Red);
-        }
 
         refinementOfPhrase = (_writingMode == WritingMode.modeCreateNew) ? "to be created" : "to impose result";
-        try {
-            _pathTxt = args[++parameterCount];
+        if(options.TryGetValue("pathTxt", out var pathTxt)) {
+            _pathTxt = pathTxt;
             ShowMessage($"Name of text file {refinementOfPhrase}:" + _pathTxt, ConsoleColor.Green);
-        } catch(IndexOutOfRangeException) {
+        } else
             ShowMessage($"Name of text file {refinementOfPhrase} is not given. Used default: " + _pathTxt, ConsoleColor.Red);
-        }
 
-        try {
-            _addEmptyLineToEnd = bool.Parse(args[++parameterCount]);
-            ShowMessage(@"Add an additional empty line to the end of the file?: " + _addEmptyLineToEnd, ConsoleColor.Green);
-        } catch(IndexOutOfRangeException) {
-            ShowMessage(@"Parameter whether to add an additional empty line to the end is not given. Used default: " + _addEmptyLineToEnd, ConsoleColor.Red);
-        }
+        if(options.TryGetValue("emptyLineAtEnd", out var emptyLineAtEnd)) {
+            _emptyLineAtEnd = bool.Parse(emptyLineAtEnd);
+            ShowMessage(@"Add an additional empty line to the end of the file?: " + _emptyLineAtEnd, ConsoleColor.Green);
+        } else
+            ShowMessage(@"Parameter whether to add an additional empty line to the end is not given. Used default: " + _emptyLineAtEnd, ConsoleColor.Red);
 
-        try {
-            string stEncoding = args[++parameterCount];
-            if(stEncoding is "default" or "-" or "auto" or "0" or "defaultEncoding") {
+        if(options.TryGetValue("encoding", out var encoding)) {
+            if(encoding is "default" or "-" or "auto" or "defaultEncoding") {
                 _encoding = Encoding.Default;
-                ShowMessage($"Encoding for the text file: {stEncoding} => the application will used default encoding ({_encoding})", ConsoleColor.Green);
+                ShowMessage($"Encoding for the text file: {encoding} => the application will used default encoding ({_encoding})", ConsoleColor.Green);
             } else {
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                int codingAsInt;
-                if(int.TryParse(stEncoding, out codingAsInt))           // make shorter
-                    _encoding = Encoding.GetEncoding(codingAsInt);
-                else
-                    _encoding = Encoding.GetEncoding(stEncoding);
-                ShowMessage($"Encoding for the text file: {stEncoding} => {_encoding}", ConsoleColor.Green);
+                _encoding = int.TryParse(encoding, out int codingAsInt)
+                    ? Encoding.GetEncoding(codingAsInt)
+                    : Encoding.GetEncoding(encoding);
+                ShowMessage($"Encoding for the text file: {encoding} => {_encoding}", ConsoleColor.Green);
             }
-        } catch(IndexOutOfRangeException) {
-            _encoding = Encoding.Default;
+        } else
             ShowMessage("Encoding for the text file is not given. Used default: " + _encoding, ConsoleColor.Red);
-        }
     }
 
 
@@ -138,15 +141,15 @@ public class ConsoleUserInteraction : IUserInteraction
 
 
     public (string pathInputExcel, string sheetName, string columnPositions, string columnTexts, string rowRange, string? cellIgnoringMark,
-        WritingMode writingMode, string pathTxt, bool addEmptyLineToEnd, Encoding encoding)
+        WritingMode writingMode, string pathTxt, bool emptyLineAtEnd, Encoding encoding)
         GetParametersForModeExtractOneColumn() =>
-        (_pathInputExcel, _sheetName, _columnPositions, _columnTexts, _rowRange, _cellIgnoringMark, _writingMode, _pathTxt, _addEmptyLineToEnd, _encoding);
+        (_pathInputExcel, _sheetName, _columnPositions, _columnTexts, _rowRange, _cellIgnoringMark, _writingMode, _pathTxt, _emptyLineAtEnd, _encoding);
 
 
     public (string pathInputExcel, string sheetName, string columnPositions, string columnTexts, string columnTextsOverlay, string rowRange, string? cellIgnoringMark,
-        WritingMode writingMode, string pathTxt, bool addEmptyLineToEnd, Encoding encoding)
+        WritingMode writingMode, string pathTxt, bool emptyLineAtEnd, Encoding encoding)
         GetParametersForModeCombineTwoColumns() =>
-        (_pathInputExcel, _sheetName, _columnPositions, _columnTexts, _columnTextsOverlay, _rowRange, _cellIgnoringMark, _writingMode, _pathTxt, _addEmptyLineToEnd, _encoding);
+        (_pathInputExcel, _sheetName, _columnPositions, _columnTexts, _columnTextsOverlay, _rowRange, _cellIgnoringMark, _writingMode, _pathTxt, _emptyLineAtEnd, _encoding);
 
 
     public void ShowMessage(string message, bool isLinebreakAdded = true)
@@ -189,32 +192,3 @@ public class ConsoleUserInteraction : IUserInteraction
         Console.ReadKey();
     }
 }
-
-
-
-//temp:
-
-//if(_appMode is not AppMode.extractOneColumn or AppMode.combineTwoColumns)
-//    throw new ArgumentException("Unsupported global mode: " + _appMode);
-
-
-//if(_writingMode is not WritingMode.modeCreateNew or WritingMode.modeOverlay)
-//    throw new ArgumentException("Unsupported writing mode: " + _appMode);
-
-
-//Console.WriteLine($"CellIgnoringMark: >{_cellIgnoringMark}<");
-
-
-//int parRowRange = 5;
-//int parCellIgnoringMark = 6;
-//int parWritingMode = 7;
-//int parPathTxt = 8;
-//int parAddEmptyLineToEnd = 9;
-//int parEncoding = 10;
-
-//parRowRange += 1;
-//parCellIgnoringMark += 1;
-//parWritingMode += 1;
-//parPathTxt += 1;
-//parEncoding += 1;
-//parAddEmptyLineToEnd += 1;

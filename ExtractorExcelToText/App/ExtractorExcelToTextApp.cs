@@ -21,6 +21,8 @@ public class ExtractorExcelToTextApp
 
     public void Run()
     {
+        bool testMode = false;
+
         AppMode appMode = _userInteraction.GetAppMode();
         string pathInputExcel;
         string sheetName;
@@ -31,18 +33,16 @@ public class ExtractorExcelToTextApp
         string? cellIgnoringMark;
         WritingMode writingMode;
         string pathTxt;
-        bool addEmptyLineToEnd;
+        bool emptyLineAtEnd;
         Encoding encoding;
-
-        bool testMode = false;
 
         Stopwatch stopwatch = Stopwatch.StartNew();
 
         if(appMode == AppMode.extractOneColumn) {
-            (pathInputExcel, sheetName, columnPositions, columnTexts, rowRange, cellIgnoringMark, writingMode, pathTxt, addEmptyLineToEnd, encoding) =
+            (pathInputExcel, sheetName, columnPositions, columnTexts, rowRange, cellIgnoringMark, writingMode, pathTxt, emptyLineAtEnd, encoding) =
                 _userInteraction.GetParametersForModeExtractOneColumn();
         } else if(appMode == AppMode.combineTwoColumns) {
-            (pathInputExcel, sheetName, columnPositions, columnTexts, columnTextsOverlay, rowRange, cellIgnoringMark, writingMode, pathTxt, addEmptyLineToEnd, encoding) =
+            (pathInputExcel, sheetName, columnPositions, columnTexts, columnTextsOverlay, rowRange, cellIgnoringMark, writingMode, pathTxt, emptyLineAtEnd, encoding) =
                 _userInteraction.GetParametersForModeCombineTwoColumns();
         } else
             throw new ArgumentException("Unsupported global mode: " + appMode);
@@ -82,9 +82,9 @@ public class ExtractorExcelToTextApp
         _userInteraction.ShowMessage(stringsReady[0..Math.Min(5, stringsReady.Length)], ConsoleColor.Cyan);
 
         if(testMode)
-            _userInteraction.ShowMessage($"The app is in the test mode: no writing the output file.", ConsoleColor.Red);
+            _userInteraction.ShowMessage($"The app is in the test mode: no writing the output file.", ConsoleColor.DarkRed);
         else
-            _repository.WriteArrayToRepository(pathTxt, stringsReady, addEmptyLineToEnd, encoding);
+            _repository.WriteArrayToRepository(pathTxt, stringsReady, emptyLineAtEnd, encoding);
 
         _userInteraction.ShowMessage('\n' + "The app completed its work.");
 

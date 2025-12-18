@@ -1,7 +1,5 @@
 ﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Wordprocessing;
 using ExtractorExcelToText.DataStructures;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -12,7 +10,7 @@ internal class DiskRepository : IRepository
     public XLWorkbook GetXLWorkbook(string pathInputExcel)
     {
         if(!File.Exists(pathInputExcel))
-            throw new FileNotFoundException($"\nFile with name '{pathInputExcel}'\n({Path.GetFullPath(pathInputExcel)})\ndoes not exist");
+            throw new FileNotFoundException($"\nFile with name '{pathInputExcel}' ({Path.GetFullPath(pathInputExcel)}) does not exist");
 
         return new XLWorkbook(pathInputExcel);
     }
@@ -79,16 +77,16 @@ internal class DiskRepository : IRepository
     public string[] ReadTxt(string pathInputText, Encoding encoding)
     {
         if(!File.Exists(pathInputText))
-            throw new FileNotFoundException($"\nFile with name '{pathInputText}'\n({Path.GetFullPath(pathInputText)})\ndoes not exist");
+            throw new FileNotFoundException($"\nFile with name '{pathInputText}' ({Path.GetFullPath(pathInputText)}) does not exist");
 
         return File.ReadAllLines(pathInputText, encoding)
                    .ToArray();
     }
 
 
-    public void WriteArrayToRepository(string filePath, string[] stringsReady, bool addEmptyLineToEnd, Encoding encoding)
+    public void WriteArrayToRepository(string filePath, string[] stringsReady, bool emptyLineAtEnd, Encoding encoding)
     {
-        if(addEmptyLineToEnd)
+        if(emptyLineAtEnd)
             File.WriteAllLines(filePath, stringsReady, encoding);    // This creates empty line at the end of the file
         else
             File.WriteAllText(filePath,

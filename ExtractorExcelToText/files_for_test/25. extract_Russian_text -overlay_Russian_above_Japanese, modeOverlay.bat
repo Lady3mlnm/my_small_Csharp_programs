@@ -4,4 +4,16 @@
 
 copy Data\Test_base.txt Data\Test_Output.txt
 
-start ExtractorExcelToText.exe combineTwoColumns Data\Test_Excel.xlsx "Dump PS2" B E G "3:30" . modeOverlay Data\Test_Output.txt true default
+start ExtractorExcelToText.exe ^
+	--appMode=combineTwoColumns ^
+	--pathInputExcel=Data\Test_Excel.xlsx ^
+	--sheetName="Dump PS2" ^
+	--columnPositions=B ^
+	--columnTexts=E ^
+	--columnTextsOverlay=G ^
+	--rowRange=3:30 ^
+	--cellIgnoringMark=. ^
+	--writingMode=modeOverlay ^
+	--pathTxt=Data\Test_Output.txt ^
+	--emptyLineAtEnd ^
+	--encoding=default
