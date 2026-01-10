@@ -1,4 +1,4 @@
-:: This command extracts names of amino acids and writes them to text file in the same order as they are placed in Excel file (auto-numbering is used).
+:: Эта команда извлекает названия аминокислот и записывает их в текстовый файл в том же порядке, как в Экселе (используется автонумерация).
 
 start ExtractorExcelToText.exe ^
 	--appMode=extractOneColumn ^

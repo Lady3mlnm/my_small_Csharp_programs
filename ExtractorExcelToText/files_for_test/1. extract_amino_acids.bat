@@ -1,4 +1,4 @@
-:: Эта команда извлекает названия аминокислот и размещает их в соответствии с указанными в Экселе позициями.
+:: This command extracts names of amino acids and places them according to positions specified in Excel file.
 
 start ExtractorExcelToText.exe ^
 	--appMode=extractOneColumn ^

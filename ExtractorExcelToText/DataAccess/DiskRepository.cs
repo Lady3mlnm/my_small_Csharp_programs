@@ -7,17 +7,17 @@ namespace ExtractorExcelToText.DataAccess;
 
 internal class DiskRepository : IRepository
 {
-    public XLWorkbook GetXLWorkbook(string pathInputExcel)
+    public FileStream GetFileStreamFromStorage(string pathInputExcel)
     {
         if(!File.Exists(pathInputExcel))
             throw new FileNotFoundException($"\nFile with name '{pathInputExcel}' ({Path.GetFullPath(pathInputExcel)}) does not exist");
-
-        return new XLWorkbook(pathInputExcel);
+        return new FileStream(pathInputExcel, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
     }
 
 
-    public IOrderedEnumerable<Record> ReadExcelColumn(ref XLWorkbook workbook, string sheetName, string columnPositions, string columnTexts, string rowRange, string? cellIgnoringMark = "")
+    public IOrderedEnumerable<Record> ReadExcelColumn(FileStream fileStream, string sheetName, string columnPositions, string columnTexts, string rowRange, string? cellIgnoringMark = "")
     {
+        XLWorkbook workbook = new XLWorkbook(fileStream);
         var worksheet = workbook.Worksheet(sheetName);
 
         string pattern = @"\d+";
@@ -42,8 +42,9 @@ internal class DiskRepository : IRepository
     }
 
 
-    public IOrderedEnumerable<Record> ReadExcelTwoColumnsCombined(ref XLWorkbook workbook, string sheetName, string columnPositions, string columnTexts, string columnOverlaps, string rowRange, string? cellIgnoringMark)
+    public IOrderedEnumerable<Record> ReadExcelTwoColumnsCombined(FileStream fileStream, string sheetName, string columnPositions, string columnTexts, string columnOverlaps, string rowRange, string? cellIgnoringMark)
     {
+        XLWorkbook workbook = new XLWorkbook(fileStream);
         var worksheet = workbook.Worksheet(sheetName);
 
         string pattern = @"\d+";

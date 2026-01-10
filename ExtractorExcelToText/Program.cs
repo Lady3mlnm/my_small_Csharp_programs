@@ -6,7 +6,7 @@ internal class Program
     private static void Main(string[] args)
     {
         try {
-            const string APPTITLE = "ExtractorExcelToText v0.3";
+            const string APPTITLE = "ExtractorExcelToText v0.3.1";
             IRepository repository = new DiskRepository();
             IUserInteraction userInteraction = new ConsoleUserInteraction(args, APPTITLE);
             ConversionLogic conversionLogic = new ConversionLogic();
@@ -15,7 +15,7 @@ internal class Program
             extractorExcelToTextApp.Run();
         } catch(Exception ex) {
             Console.WriteLine("\nThe application has experienced an unexpected error.\n" +
-                                        "The error message: " + ex.Message);
+                              "The error message: " + ex.Message);
             Console.ReadKey();
         }
     }

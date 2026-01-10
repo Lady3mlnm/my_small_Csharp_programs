@@ -1,5 +1,5 @@
-:: Эта команда извлекает названия аминокислот и размещает их в соответствии с указанными в Экселе позициями.
-:: Результат накладывается поверх имеющегося в файле содержимого.
+:: This command extracts names of amino acids and places them according to positions specified in Excel file.
+:: The result is overlaid on top of the file content.
 
 copy Data\Test_base.txt Data\Test_Output.txt
 

@@ -21,14 +21,12 @@ public class ExtractorExcelToTextApp
 
     public void Run()
     {
-        bool testMode = false;
-
-        AppMode appMode = _userInteraction.GetAppMode();
+        AppMode appMode;
         string pathInputExcel;
         string sheetName;
         string columnPositions;
         string columnTexts;
-        string columnTextsOverlay = "";
+        string columnTextsOverlay;
         string rowRange;
         string? cellIgnoringMark;
         WritingMode writingMode;
@@ -38,59 +36,52 @@ public class ExtractorExcelToTextApp
 
         Stopwatch stopwatch = Stopwatch.StartNew();
 
-        if(appMode == AppMode.extractOneColumn) {
-            (pathInputExcel, sheetName, columnPositions, columnTexts, rowRange, cellIgnoringMark, writingMode, pathTxt, emptyLineAtEnd, encoding) =
-                _userInteraction.GetParametersForModeExtractOneColumn();
-        } else if(appMode == AppMode.combineTwoColumns) {
-            (pathInputExcel, sheetName, columnPositions, columnTexts, columnTextsOverlay, rowRange, cellIgnoringMark, writingMode, pathTxt, emptyLineAtEnd, encoding) =
-                _userInteraction.GetParametersForModeCombineTwoColumns();
-        } else
-            throw new ArgumentException("Unsupported global mode: " + appMode);
+        (appMode, pathInputExcel, sheetName, columnPositions, columnTexts, columnTextsOverlay,
+         rowRange, cellIgnoringMark, writingMode, pathTxt, emptyLineAtEnd, encoding) =
+             _userInteraction.GetParameters();
 
-
-        XLWorkbook workbook = _repository.GetXLWorkbook(pathInputExcel);
-        IOrderedEnumerable<Record> records = appMode switch {
-                AppMode.extractOneColumn => _repository.ReadExcelColumn(ref workbook, sheetName, columnPositions, columnTexts, rowRange, cellIgnoringMark),
-                AppMode.combineTwoColumns => _repository.ReadExcelTwoColumnsCombined(ref workbook, sheetName, columnPositions, columnTexts, columnTextsOverlay, rowRange, cellIgnoringMark),
+        using(FileStream fileStream = _repository.GetFileStreamFromStorage(pathInputExcel)) {
+            IOrderedEnumerable<Record> records = appMode switch {
+                AppMode.extractOneColumn => _repository.ReadExcelColumn(
+                    fileStream, sheetName, columnPositions, columnTexts, rowRange, cellIgnoringMark),
+                AppMode.combineTwoColumns => _repository.ReadExcelTwoColumnsCombined(
+                    fileStream, sheetName, columnPositions, columnTexts, columnTextsOverlay, rowRange, cellIgnoringMark),
                 _ => throw new ArgumentException("Unsupported mode: " + appMode)
-        };
+            };
 
-        _userInteraction.ShowMessage("\nNumber of strings extracted from Excel: " + records.Count());
-        _userInteraction.ShowMessage("First five pairs position-string:");
-        var examplesOfRecords = records.Take(Math.Min(5, records.Count()))
-                                       .Select(record => record.ToString());
-        _userInteraction.ShowMessage(examplesOfRecords, ConsoleColor.Cyan);
+            _userInteraction.ShowMessage("\nNumber of strings extracted from Excel: " + records.Count());
+            _userInteraction.ShowMessage("First five pairs position-string:");
+            var examplesOfRecords = records.Take(Math.Min(5, records.Count()))
+                                            .Select(record => record.ToString());
+            _userInteraction.ShowMessage(examplesOfRecords, ConsoleColor.Cyan);
 
-        string[] stringsReady = [];
-        if(writingMode == WritingMode.modeCreateNew) {
-            _userInteraction.ShowMessage($"\nMode {writingMode} chosen: create for extracted phrases a new file");
-            stringsReady = _conversionLogic.RecordsToArrayOfString(records);
-        } else if(writingMode == WritingMode.modeOverlay) {
-            _userInteraction.ShowMessage($"\nMode {writingMode} chosen: overlay extracted phrases above contents of the given file");
+            string[] stringsReady = [];
+            if(writingMode == WritingMode.modeCreateNew) {
+                _userInteraction.ShowMessage($"\nMode {writingMode} chosen: create for extracted phrases a new file");
+                stringsReady = _conversionLogic.RecordsToArrayOfString(records);
+            } else if(writingMode == WritingMode.modeOverlay) {
+                _userInteraction.ShowMessage($"\nMode {writingMode} chosen: overlay extracted phrases above contents of the given file");
 
-            string[] stringsFromTxt = _repository.ReadTxt(pathTxt, encoding);
+                string[] stringsFromTxt = _repository.ReadTxt(pathTxt, encoding);
 
-            _userInteraction.ShowMessage($"\nFirst five original strings in the given file:");
-            _userInteraction.ShowMessage(stringsFromTxt[0..Math.Min(5, stringsFromTxt.Length)], ConsoleColor.Cyan);
+                _userInteraction.ShowMessage($"\nFirst five original strings in the given file:");
+                _userInteraction.ShowMessage(stringsFromTxt[0..Math.Min(5, stringsFromTxt.Length)], ConsoleColor.Cyan);
 
-            stringsReady = _conversionLogic.OverlayRecordsToArrayOfString(stringsFromTxt, records);
-        } else
-            throw new ArgumentException("Unsupported mode for output of results: " + writingMode);
+                stringsReady = _conversionLogic.OverlayRecordsToArrayOfString(stringsFromTxt, records);
+            } else
+                throw new ArgumentException("Unsupported mode for output of results: " + writingMode);
 
-        _userInteraction.ShowMessage('\n' + "Number of strings to write down to the file: " + stringsReady.Length);
-        _userInteraction.ShowMessage($"\nFirst five strings:");
-        _userInteraction.ShowMessage(stringsReady[0..Math.Min(5, stringsReady.Length)], ConsoleColor.Cyan);
+            _userInteraction.ShowMessage('\n' + "Number of strings to write down to the file: " + stringsReady.Length);
+            _userInteraction.ShowMessage($"\nFirst five strings:");
+            _userInteraction.ShowMessage(stringsReady[0..Math.Min(5, stringsReady.Length)], ConsoleColor.Cyan);
 
-        if(testMode)
-            _userInteraction.ShowMessage($"The app is in the test mode: no writing the output file.", ConsoleColor.DarkRed);
-        else
             _repository.WriteArrayToRepository(pathTxt, stringsReady, emptyLineAtEnd, encoding);
 
-        _userInteraction.ShowMessage('\n' + "The app completed its work.");
+            _userInteraction.ShowMessage('\n' + "The app completed its work.");
+        }
 
         stopwatch.Stop();
         _userInteraction.ShowMessage($"Total time of the application work : {(double)stopwatch.ElapsedMilliseconds / 1000:F3} sec", ConsoleColor.Yellow);
-
         _userInteraction.GetCloseAppConfirmation();
     }
 }

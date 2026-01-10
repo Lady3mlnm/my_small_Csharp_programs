@@ -1,13 +1,11 @@
-:: This command overlays the contents of one Excel column on top of the other.
-:: The result is written to a text file according to the positions specified in Excel.
+:: Эта команда извлекает названия аминокислот и размещает их в соответствии с указанными в Экселе позициями.
 
 start ExtractorExcelToText.exe ^
-	--appMode=combineTwoColumns ^
+	--appMode=extractOneColumn ^
 	--pathInputExcel=Data\Test_Excel.xlsx ^
 	--sheetName="Amino Acids" ^
 	--columnPositions=A ^
-	--columnTexts=B ^
-	--columnTextsOverlay=H ^
+	--columnTexts=C ^
 	--rowRange=2:4,6,10:15 ^
 	--cellIgnoringMark="" ^
 	--writingMode=modeCreateNew ^

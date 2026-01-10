@@ -1,6 +1,6 @@
-:: Эта команда извлекает названия аминокислот и записывает их в текстовый файл в том же порядке, как в Экселе (используется автонумерация).
-:: Проверка, как программа работает с русским текстом и кодировкой UTF-8.
-:: Примеры заданиия альтернативных кодировок: ASCII, Windows-1252 (или, просто, 1252), Latin1, iso-8859-1.
+:: This command extracts names of amino acids and writes them to text file in the same order as they are placed in Excel file (auto-numbering is used).
+:: This is a test how the program works with Cyrillic symbols and endoding UTF-8.
+:: Examples of alternative encodings: ASCII, Windows-1252 (or simply 1252), Latin1, iso-8859-1.
 
 start ExtractorExcelToText.exe ^
 	--appMode=extractOneColumn ^

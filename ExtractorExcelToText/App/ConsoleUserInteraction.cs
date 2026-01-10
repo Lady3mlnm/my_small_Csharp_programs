@@ -7,11 +7,11 @@ public class ConsoleUserInteraction : IUserInteraction
 {
     private AppMode _appMode = AppMode.extractOneColumn;   //  AppMode.extractOneColumn / AppMode.combineTwoColumns
     private string _pathInputExcel = @"Data\Test_Excel.xlsx";
-    private string _sheetName = "Amino Acids";  // "TestSheet"
-    private string _columnPositions = "auto";         // "auto" / "A"
+    private string _sheetName = "TestSheet";               // "Amino Acids"
+    private string _columnPositions = "auto";
     private string _columnTexts = "C";
-    private string _columnTextsOverlay = "H";   // "C"
-    private string _rowRange = "3:5,10,14:16";  //"2:24";          // "2:11"
+    private string _columnTextsOverlay = "H";
+    private string _rowRange = "2:11";                     // "3:5,10,14:16";
     private string? _cellIgnoringMark = "";
     private WritingMode _writingMode = WritingMode.modeCreateNew;  // WritingMode.modeCreateNew / WritingMode.modeOverlay;
     private string _pathTxt = @"Data\Test_Output.txt";
@@ -82,7 +82,8 @@ public class ConsoleUserInteraction : IUserInteraction
                 ShowMessage("Column with overlay texts: " + _columnTextsOverlay, ConsoleColor.Green);
             } else
                 ShowMessage("Column with overlay texts is not given. Used default: " + _columnTextsOverlay, ConsoleColor.Red);
-        }
+        } else
+            _columnTextsOverlay = "";
 
         if(options.TryGetValue("rowRange", out var rowRange)) {
             _rowRange = rowRange;
@@ -136,20 +137,11 @@ public class ConsoleUserInteraction : IUserInteraction
     }
 
 
-    public AppMode GetAppMode() =>
-        _appMode;
-
-
-    public (string pathInputExcel, string sheetName, string columnPositions, string columnTexts, string rowRange, string? cellIgnoringMark,
-        WritingMode writingMode, string pathTxt, bool emptyLineAtEnd, Encoding encoding)
-        GetParametersForModeExtractOneColumn() =>
-        (_pathInputExcel, _sheetName, _columnPositions, _columnTexts, _rowRange, _cellIgnoringMark, _writingMode, _pathTxt, _emptyLineAtEnd, _encoding);
-
-
-    public (string pathInputExcel, string sheetName, string columnPositions, string columnTexts, string columnTextsOverlay, string rowRange, string? cellIgnoringMark,
-        WritingMode writingMode, string pathTxt, bool emptyLineAtEnd, Encoding encoding)
-        GetParametersForModeCombineTwoColumns() =>
-        (_pathInputExcel, _sheetName, _columnPositions, _columnTexts, _columnTextsOverlay, _rowRange, _cellIgnoringMark, _writingMode, _pathTxt, _emptyLineAtEnd, _encoding);
+    public (AppMode appMode, string pathInputExcel, string sheetName, string columnPositions, string columnTexts, string columnTextsOverlay,
+        string rowRange, string? cellIgnoringMark, WritingMode writingMode, string pathTxt, bool emptyLineAtEnd, Encoding encoding)
+        GetParameters() =>
+        (_appMode, _pathInputExcel, _sheetName, _columnPositions, _columnTexts, _columnTextsOverlay,
+        _rowRange, _cellIgnoringMark, _writingMode, _pathTxt, _emptyLineAtEnd, _encoding);
 
 
     public void ShowMessage(string message, bool isLinebreakAdded = true)

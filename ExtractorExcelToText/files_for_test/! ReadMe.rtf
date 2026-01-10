@@ -1,0 +1,299 @@
+{\rtf1\ansi\deff3\adeflang1025
+{\fonttbl{\f0\froman\fprq2\fcharset0 Times New Roman;}{\f1\froman\fprq2\fcharset2 Symbol;}{\f2\fswiss\fprq2\fcharset0 Arial;}{\f3\froman\fprq2\fcharset0 Liberation Serif{\*\falt Times New Roman};}{\f4\froman\fprq2\fcharset0 Lucida Console;}{\f5\froman\fprq2\fcharset0 Liberation Sans{\*\falt Arial};}{\f6\fnil\fprq2\fcharset0 Microsoft YaHei;}{\f7\fnil\fprq2\fcharset0 0;}{\f8\fnil\fprq2\fcharset0 Arial;}}
+{\colortbl;\red0\green0\blue0;\red0\green0\blue255;\red0\green255\blue255;\red0\green255\blue0;\red255\green0\blue255;\red255\green0\blue0;\red255\green255\blue0;\red255\green255\blue255;\red0\green0\blue128;\red0\green128\blue128;\red0\green128\blue0;\red128\green0\blue128;\red128\green0\blue0;\red128\green128\blue0;\red128\green128\blue128;\red192\green192\blue192;\red60\green64\blue67;}
+{\stylesheet{\s0\snext0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052 Normal;}
+{\s15\sbasedon0\snext16\rtlch\af8\afs28\alang1081 \ltrch\lang1033\langfe2052\hich\af5\loch\ql\nowidctlpar\hyphpar0\sb240\sa120\keepn\ltrpar\cf0\f5\fs28\lang1033\kerning1\dbch\af6\langfe2052 Heading;}
+{\s16\sbasedon0\snext16\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\sl276\slmult1\ql\nowidctlpar\hyphpar0\sb0\sa140\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052 Text Body;}
+{\s17\sbasedon16\snext17\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\sl276\slmult1\ql\nowidctlpar\hyphpar0\sb0\sa140\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052 List;}
+{\s18\sbasedon0\snext18\rtlch\af8\afs24\alang1081\ai \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\sb120\sa120\ltrpar\cf0\f3\fs24\lang1033\i\kerning1\dbch\af7\langfe2052 Caption;}
+{\s19\sbasedon0\snext19\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052 Index;}
+}{\*\generator LibreOffice/7.1.5.2$Windows_X86_64 LibreOffice_project/85f04e9f809797b8199d13c421bd8a2b025d52b5}{\info{\creatim\yr0\mo0\dy0\hr0\min0}{\revtim\yr2026\mo1\dy9\hr16\min21}{\printim\yr0\mo0\dy0\hr0\min0}}{\*\userprops}\deftab709
+\hyphauto1\viewscale150
+{\*\pgdsctbl
+{\pgdsc0\pgdscuse451\pgwsxn12240\pghsxn15840\marglsxn1134\margrsxn1134\margtsxn1134\margbsxn1134\pgdscnxt0 Default Page Style;}}
+\formshade\paperh15840\paperw12240\margl1134\margr1134\margt1134\margb1134\sectd\sbknone\pgndec\sftnnar\saftnnrlc\sectunlocked1\pgwsxn12240\pghsxn15840\marglsxn1134\margrsxn1134\margtsxn1134\margbsxn1134\ftnbj\ftnstart1\ftnrstcont\ftnnar\aenddoc\aftnrstcont\aftnstart1\aftnnrlc
+{\*\ftnsep\chftnsep}\pgndec\pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\loch\lang1033\loch
+The console application "}{\loch\lang1049\loch
+ExtractorExcelToText}{\loch\lang1033\loch
+" is created to automate the transfer of Excel file contents to a text file. The program can perform some actions in various ways, this is determined }{\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\loch\cf0\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+through }{\rtlch\af8\afs24\alang1081 \ltrch\langfe2052\loch\cf0\fs24\kerning1\dbch\af7\langfe2052\loch
+the command-line parameters passed}{\loch\lang1033\loch
+. Various combinations of parameters allow to use the applicatin in various modes for various tasks.}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\loch\lang1049\loch
+The parameters are set using keywords.\line The order of the parameters does not matter.\line If a parameter is missing, the default value for it is used.}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\loch\lang1049\loch
+Example of a startup command with parameters:}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\afs20 \ltrch\lang1049\hich\af4\loch\cf2\fs20\lang1049\f4\loch
+start ExtractorExcelToText.exe ^}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\afs20 \ltrch\lang1049\hich\af4\loch\cf2\fs20\lang1049\f4\loch
+\tab --appMode=extractOneColumn ^}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\afs20 \ltrch\lang1049\hich\af4\loch\cf2\fs20\lang1049\f4\loch
+\tab --pathInputExcel=Data\\Test_Excel.xlsx ^}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\afs20 \ltrch\lang1049\hich\af4\loch\cf2\fs20\lang1049\f4\loch
+\tab --sheetName="Amino Acids" ^}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\afs20 \ltrch\lang1049\hich\af4\loch\cf2\fs20\lang1049\f4\loch
+\tab --columnPositions=A ^}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\afs20 \ltrch\lang1049\hich\af4\loch\cf2\fs20\lang1049\f4\loch
+\tab --columnTexts=}{\rtlch\afs20 \ltrch\hich\af4\loch\cf2\fs20\f4\loch
+B}{\rtlch\afs20 \ltrch\lang1049\hich\af4\loch\cf2\fs20\lang1049\f4\loch
+ ^}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\afs20 \ltrch\lang1049\hich\af4\loch\cf2\fs20\lang1049\f4\loch
+\tab --rowRange=2:4,6,10:15 ^}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\afs20 \ltrch\lang1049\hich\af4\loch\cf2\fs20\lang1049\f4\loch
+\tab --cellIgnoringMark="" ^}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\afs20 \ltrch\lang1049\hich\af4\loch\cf2\fs20\lang1049\f4\loch
+\tab --writingMode=modeCreateNew ^}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\afs20 \ltrch\lang1049\hich\af4\loch\cf2\fs20\lang1049\f4\loch
+\tab --pathTxt=Data\\Test_Output.txt ^}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\afs20 \ltrch\lang1049\hich\af4\loch\cf2\fs20\lang1049\f4\loch
+\tab --emptyLineAtEnd ^}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\afs20 \ltrch\lang1049\hich\af4\loch\cf2\fs20\lang1049\f4\loch
+\tab --encoding=default}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\ai \ltrch\lang1049\loch\cf15\lang1049\i\loch
+(the ^ character at the end of each line is necessary for the command line interpreter to treat the entire expression as a single line.\line If there are spaces in }{\rtlch\af8\afs24\alang1081\ai \ltrch\lang1033\langfe2052\loch\cf15\fs24\lang1033\i\kerning1\dbch\af7\langfe2052\loch
+a}{\rtlch\ai \ltrch\lang1049\loch\cf15\lang1049\i\loch
+ transmitted value, enclose it in quotation marks.)}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\loch\lang1049\loch
+Description of parameters:}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\ab \ltrch\loch\cf2\b\loch
+appMode}{\loch
+ \u8211\'96 }{\loch
+a }{\loch\lang1049\loch
+global mode of operation of the application. Possible values:}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{
+    \uc0 \u55357\uc1 \u57240\'3f }{\loch\lang1049\b\loch
+extractOneColumn}{\loch\lang1049\loch
+ \u8211\'96 one column is taken from Excel and the contents of its cells are transferred to a text file.}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\loch\b
+    \uc0 \u55357\uc1 \u57240\'3f }{\loch\b\loch
+combineTwoColumns}{\loch\lang1049\loch
+ \u8211\'96 two columns are taken from Excel }{\rtlch\ai \ltrch\lang1049\loch\cf15\lang1049\i\loch
+(for example, it can be a column with original texts and a column with their translation)}{\loch\lang1049\loch
+. The contents of the column with translations - where they were made - are overlaid on top of the visible column with the original texts. The result is a mixture of texts in two languages: where there is a translation, the translation is used, and where there is no translation, the original text is used. The result of the merge is transferred to a text file.}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\ab \ltrch\lang1049\loch\cf2\lang1049\b\loch
+pathInputExcel}{\loch
+ \u8211\'96 }{\loch\lang1049\loch
+name of the Excel file .}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\ab \ltrch\lang1049\loch\cf2\lang1049\b\loch
+sheetName}{\loch\lang1049\loch
+ \u8211\'96 name of }{\loch\lang1033\loch
+worksheet in the Excel file}{\loch\lang1049\loch
+.}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\ab \ltrch\lang1049\loch\cf2\lang1049\b\loch
+columnPositions}{\loch\lang1049\loch
+ \u8211\'96 a column that contains the specified line positions in a text file, starting from 1 }{\loch\cf15\lang1049\i\loch
+(for example, column "A")}{\loch\cf15\lang1049\loch
+.}{\loch\lang1049\loch
+ Instead of using a column with predefined positions, you can ask the program to use auto-numbering. To do this, set one of the following words as the parameter value: }{\loch\lang1049\b\loch
+auto}{\loch\lang1049\loch
+, }{\rtlch\ab \ltrch\lang1049\loch\lang1049\b\loch
+autoNumbering}{\loch\lang1049\loch
+, }{\rtlch\ab \ltrch\lang1049\loch\lang1049\b\loch
+default}{\loch\lang1049\loch
+, }{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+-.}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\rtlch\ab0 \ltrch\loch\b0\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\ab \ltrch\lang1049\loch\cf2\lang1049\b\loch
+columnTexts}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+ \u8211\'96 }{\rtlch\af8\afs24\alang1081\ab0 \ltrch\lang1033\langfe2052\loch\cf0\fs24\lang1033\b0\kerning1\dbch\af7\langfe2052\loch
+a}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+ column with extracted}{\rtlch\ab0 \ltrch\lang1033\loch\lang1033\b0\loch
+ }{\rtlch\ab0 \ltrch\lang1033\loch\lang1033\b0\loch
+texts}{\rtlch\ab0 \ltrch\lang1033\loch\lang1033\b0\loch
+ }{\rtlch\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+(}{\rtlch\ai\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+for example,}{\rtlch\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+ "\u1042\'3f")}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+.}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\rtlch\ab0 \ltrch\loch\b0\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\ab \ltrch\lang1049\loch\cf2\lang1049\b\loch
+columnTextsOverlay}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+ \u8211\'96}{\rtlch\ab0 \ltrch\lang1033\loch\lang1033\b0\loch
+ }{\rtlch\ab0 \ltrch\lang1033\loch\lang1033\b0\loch
+a}{\rtlch\ab0 \ltrch\lang1033\loch\lang1033\b0\loch
+ }{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+column with lines of text that will be superimposed on the base }{\rtlch\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+(}{\rtlch\ai\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+for example}{\rtlch\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+, "C")}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+. This parameter only makes sense if the application is running in}{\rtlch\ab0 \ltrch\lang1033\loch\lang1033\b0\loch
+ }{\rtlch\ab0 \ltrch\lang1033\loch\lang1033\b0\loch
+mode}{\rtlch\ab0 \ltrch\lang1033\loch\lang1033\b0\loch
+ }{\rtlch\ab0 \ltrch\loch\b\loch
+combineTwoColumns}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+. In the case of translation, this is a column with translations.}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\rtlch\ab0 \ltrch\loch\b0\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\ab \ltrch\lang1049\loch\cf2\lang1049\b\loch
+rowRange}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+ \u8211\'96 range of rows to be processed. The beginning and end of the range are separated by a colon }{\rtlch\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+(}{\rtlch\ai\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+for example}{\rtlch\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+, "2:22")}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+. You can specify a composite range }{\rtlch\ai\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+(for example, "2:}{\rtlch\ai\ab0 \ltrch\lang1033\loch\cf15\lang1033\i\b0\loch
+4,}{\rtlch\ai\ab0 \ltrch\lang1033\loch\cf15\lang1033\i\b0\loch
+ }{\rtlch\ai\ab0 \ltrch\lang1033\loch\cf15\lang1033\i\b0\loch
+5,}{\rtlch\ai\ab0 \ltrch\lang1033\loch\cf15\lang1033\i\b0\loch
+ }{\rtlch\ai\ab0 \ltrch\lang1033\loch\cf15\lang1033\i\b0\loch
+10}{\rtlch\ai\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+:15")}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+.}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\rtlch\ab0 \ltrch\loch\b0\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\ab \ltrch\lang1049\loch\cf2\lang1049\b\loch
+cellIgnoringMark}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+ \u8211\'96 }{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+a character combination}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+ }{\rtlch\ab0 \ltrch\lang1049\loch\cf15\lang1049\b0\loch
+(in optional quotation marks)}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+, that will be used to identify cells that }{\rtlch\af8\afs24\alang1081\ab0 \ltrch\lang1033\langfe2052\loch\cf0\fs24\lang1033\b0\kerning1\dbch\af7\langfe2052\loch
+must}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+ be ignored. For example, }{\rtlch\af8\afs24\alang1081\ab0 \ltrch\lang1033\langfe2052\loch\cf0\fs24\lang1033\b0\kerning1\dbch\af7\langfe2052\loch
+in mode}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+ }{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b\loch
+modeOverlay}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+ }{\rtlch\ai\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+(}{\rtlch\af8\afs24\alang1081\ai\ab0 \ltrch\lang1033\langfe2052\loch\cf15\fs24\lang1033\i\b0\kerning1\dbch\af7\langfe2052\loch
+next parameter}{\rtlch\ai\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+)}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+ Excel cells with content identical to this parameter will not overlap the lines }{\rtlch\ab0 \ltrch\lang1033\loch\lang1033\b0\loch
+of text }{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+in the original file. By default, an empty string }{\rtlch\ai\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+("")}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+ is used. If you want to use all cells, regardless of their contents, then pass}{\rtlch\ab0 \ltrch\lang1033\loch\lang1033\b0\loch
+ }{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+"}{\rtlch\ab \ltrch\lang1049\loch\lang1049\b\loch
+doNotUseCellIgnoring}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+"}{\rtlch\ab0 \ltrch\lang1033\loch\lang1033\b0\loch
+ as the parameter}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+ }{\rtlch\ai\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+(this reserved word will be interpreted as 'null', }{\rtlch\af8\afs24\alang1081\ai\ab0 \ltrch\lang1033\langfe2052\loch\cf15\fs24\lang1033\i\b0\kerning1\dbch\af7\langfe2052\loch
+that}{\rtlch\ai\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+ will disable the ignore filter)}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+.}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\rtlch\ab0 \ltrch\loch\b0\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\ab0 \ltrch\lang1049\loch\cf15\lang1049\b0\loch
+Note: The}{\rtlch\ab0 \ltrch\lang1033\loch\cf15\lang1033\b0\loch
+ }{\rtlch\ab0 \ltrch\lang1033\loch\cf15\lang1033\b0\loch
+parameters}{\rtlch\ab0 \ltrch\lang1033\loch\cf15\lang1033\b0\loch
+ }{\rtlch\ab \ltrch\lang1049\loch\cf15\lang1049\b\loch
+rowRange}{\rtlch\ab0 \ltrch\lang1049\loch\cf15\lang1049\b0\loch
+ \u1080\'3f }{\rtlch\ab \ltrch\lang1049\loch\cf15\lang1049\b\loch
+cellIgnoringMark}{\rtlch\ab0 \ltrch\lang1049\loch\cf15\lang1049\b0\loch
+ work somewhat in a similar way. If you need to transfer the contents of an Excel column to a text file, with the exception of some rows, then in some cases this can be automated using any of these parameters}{\rtlch\ab0 \ltrch\lang1033\loch\cf15\lang1033\b0\loch
+ - }{\rtlch\ab0 \ltrch\lang1049\loch\cf15\lang1049\b0\loch
+which is more convenient}{\rtlch\ab0 \ltrch\lang1033\loch\cf15\lang1033\b0\loch
+ in the current situation}{\rtlch\ab0 \ltrch\lang1049\loch\cf15\lang1049\b0\loch
+.}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\rtlch\ab0 \ltrch\loch\b0\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\ab \ltrch\loch\cf2\b\loch
+writingMode}{\loch
+ \u8211\'96 }{\loch\lang1033\loch
+a }{\loch\lang1049\loch
+recording mode for placing the result in a file. Possible values: }
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\loch\lang1049
+    \uc0 \u55357\uc1 \u57240\'3f }{\loch\lang1049\b\loch
+modeCreate}{\loch\b\loch
+New}{\loch\lang1049\loch
+ \u8211\'96 means that the result of extracting the contents of the Excel file will be placed in a new file. If a file with that name exists, it will be overwritten.}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\loch\lang1049
+    \uc0 \u55357\uc1 \u57240\'3f }{\loch\lang1049\b\loch
+modeOverlay}{\loch\lang1049\loch
+ \u8211\'96 means that the result of extracting the contents of the Excel file will be overlaid on top of the contents of the existing file in accordance with the }{\loch\lang1033\loch
+lines }{\loch\lang1049\loch
+positions. You will end up with a file containing a combination of part of the original file content and what was extracted from Excel. }{\rtlch\ai \ltrch\lang1049\loch\cf15\lang1049\i\loch
+(Technically, the contents of the file will be read, overlaid with what is extracted from Excel, and}{\rtlch\ai \ltrch\lang1033\loch\cf15\lang1033\i\loch
+ the result of }{\rtlch\af8\afs24\alang1081\ai \ltrch\lang1033\langfe2052\loch\cf15\fs24\lang1033\i\kerning1\dbch\af7\langfe2052\loch
+the merge}{\rtlch\ai \ltrch\lang1049\loch\cf15\lang1049\i\loch
+ will be placed in a file with the same name, in the same place, with the same encoding.)}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\rtlch\ai0 \ltrch\lang1033\loch\cf0\lang1033\i0\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\ab \ltrch\lang1049\loch\cf2\lang1049\b\loch
+pathTxt}{\loch
+ \u8211\'96 }{\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\loch\cf0\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+a}{\loch\lang1049\loch
+ name of the text file in }{\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\loch\cf0\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+that}{\loch\lang1049\loch
+ the result will be placed. If the recording mode is specified as  }{\loch\lang1049\b\loch
+modeOverlay}{\loch\lang1049\loch
+, then this is an existing text file, on the contents of }{\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\loch\cf0\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+that}{\loch\lang1049\loch
+ the result will be superimposed.}
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\ab \ltrch\lang1049\loch\cf2\lang1049\b\loch
+emptyLineAtEnd}{\loch\lang1049\loch
+ \u8211\'96 whether there }{\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\loch\cf0\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+must}{\loch\lang1033\loch
+ }{\loch\lang1049\loch
+be an empty line at the end of the text file being created. Possible parameter values: true / false. Default value: true. Instead of }{\rtlch\afs18 \ltrch\lang1049\hich\af4\loch\cf15\fs18\lang1049\f4\loch
+"--emptyLineAtEnd=true"}{\loch\lang1049\loch
+, it is enough to simply write }{\rtlch\afs18 \ltrch\lang1049\hich\af4\loch\cf15\fs18\lang1049\f4\loch
+"--emptyLineAtEnd"}{\loch\lang1049\loch
+ or not specify the parameter at all \u8211\'96 }{\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\loch\cf0\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+that}{\loch\lang1049\loch
+ will lead to the use of the default value}{\loch\lang1033\loch
+ }{\rtlch\ai \ltrch\lang1049\loch\cf15\lang1049\i\loch
+(}{\rtlch\ai \ltrch\lang1033\loch\cf15\lang1033\i\loch
+true)}{\loch\lang1049\loch
+.}{\loch\lang1049\loch
+ }{\loch\lang1049\loch
+Be careful }{\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\loch\cf0\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+if you use}{\loch\lang1049\loch
+ this parameter with the}{\loch\lang1033\loch
+ }{\loch\lang1049\loch
+r}{\loch\lang1049\loch
+ecord}{\loch\lang1033\loch
+ing m}{\loch\lang1033\loch
+o}{\loch\lang1033\loch
+de}{\loch\lang1033\loch
+ }{\loch\lang1049\b\loch
+modeOverlay}{\loch\lang1049\loch
+, since the presence/absence of }{\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\loch\cf0\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+an}{\loch\lang1049\loch
+ empty line at the end of the initial version of the file is not inherited, but is determined by this parameter. }
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052\loch
+
+\par \pard\plain \s0\rtlch\af8\afs24\alang1081 \ltrch\lang1033\langfe2052\hich\af3\loch\ql\nowidctlpar\hyphpar0\ltrpar\cf0\f3\fs24\lang1033\kerning1\dbch\af7\langfe2052{\rtlch\ab \ltrch\lang1049\loch\cf2\lang1049\b\loch
+encoding}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+ \u8211\'96 encoding of the text file. If you are satisfied }{\rtlch\ab0 \ltrch\lang1033\loch\lang1033\b0\loch
+with }{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+default encoding for the current operating system, set one of the following words: }{\rtlch\ab \ltrch\lang1049\loch\lang1049\b\loch
+default}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+, }{\rtlch\ab \ltrch\lang1049\loch\lang1049\b\loch
+defaultEncoding}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+, }{\rtlch\ab \ltrch\lang1049\loch\lang1049\b\loch
+auto}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+, }{\rtlch\ab \ltrch\lang1049\loch\lang1049\b\loch
+-}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+.}{\rtlch\ab0 \ltrch\lang1033\loch\lang1033\b0\loch
+ Examples of possible parameter values}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+: UTF-8, ASCII, Windows-1252 }{\rtlch\ai\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+(or}{\rtlch\ai\ab0 \ltrch\lang1033\loch\cf15\lang1033\i\b0\loch
+ }{\rtlch\af8\afs24\alang1081\ai\ab0 \ltrch\lang1033\langfe2052\loch\cf15\fs24\lang1033\i\b0\kerning1\dbch\af7\langfe2052\loch
+simply}{\rtlch\ai\ab0 \ltrch\lang1033\loch\cf15\lang1033\i\b0\loch
+ }{\rtlch\ai\ab0 \ltrch\lang1049\loch\cf15\lang1049\i\b0\loch
+1252)}{\rtlch\ab0 \ltrch\lang1049\loch\lang1049\b0\loch
+, Latin1, iso-8859-1.}
+\par }

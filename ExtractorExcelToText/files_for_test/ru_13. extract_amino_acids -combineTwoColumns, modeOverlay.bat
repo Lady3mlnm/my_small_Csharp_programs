@@ -1,6 +1,6 @@
-:: A test of the most comprehensive, double data merge.
-:: This command overlays the contents of one Excel column on top of the other.
-:: The result is overlaid on top of the file content.
+:: Тест наиболее комплексного, двойного слияния данных.
+:: Эта команда накладывает содержимое одного столбца Экселя поверх другого.
+:: Результат накладывается поверх имеющегося в файле содержимого.
 
 copy Data\Test_base.txt Data\Test_Output.txt
 

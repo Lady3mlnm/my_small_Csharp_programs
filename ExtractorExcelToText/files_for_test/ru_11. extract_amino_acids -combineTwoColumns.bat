@@ -1,5 +1,5 @@
-:: This command overlays the contents of one Excel column on top of the other.
-:: The result is written to a text file according to the positions specified in Excel.
+:: Эта команда накладывает содержимое одного столбца Экселя поверх другого.
+:: Результат записывается в текстовый файл в соответствии с указанными в Excel позициями.
 
 start ExtractorExcelToText.exe ^
 	--appMode=combineTwoColumns ^
