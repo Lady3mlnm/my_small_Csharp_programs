@@ -36,13 +36,13 @@ public static class TableColumns
         new TableColumn("population",     "Population", 17, "Population"),
         new TableColumn("climate",        "Climate",    25, "Climate"),
         new TableColumn("terrain",        "Terrain",    40, "Terrain")
-        //new TableColumn("rotation period", "RotPrd", 6, "RotationPeriod"),
-        //new TableColumn("gravity", "Gravity", 13, "Gravity")
+        //new TableColumn("rotation period", "RotPrd",   6, "RotationPeriod"),
+        //new TableColumn("gravity",         "Gravity", 13, "Gravity")
     ];
 
     private static readonly Dictionary<string, TableColumn[]> _tables = new() {
-        ["people"]  = columnsOfTablePeople,
-        ["species"] = columnsOfTableSpecies,
+        ["people"]   = columnsOfTablePeople,
+        ["species"]  = columnsOfTableSpecies,
         ["planets"]  = columnsOfTablePlanets
     };
 

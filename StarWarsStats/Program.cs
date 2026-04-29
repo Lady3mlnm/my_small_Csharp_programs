@@ -5,7 +5,7 @@ using StarWarsStats.UserInteraction;
 
 try {
     string requestHost = "https://swapi.dev/";
-    string requestPathPeople = "api/people";
+    string requestPathPeople  = "api/people";
     string requestPathSpecies = "api/species";
     string requestPathPlanets = "api/planets";
     var consoleUserInteractor = new ConsoleUserInteractor();

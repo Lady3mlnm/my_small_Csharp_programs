@@ -56,12 +56,12 @@ public static class TablePrinter
                             (property.Name == "BirthYear")
                                 ? property.GetValue(item) switch {
                                     null => new string(' ', width),
-                                    < 0 => String.Format($"{{0, {width - 3}}}BBY", -(int)property.GetValue(item)!),
-                                    > 0 => String.Format($"{{0, {width - 3}}}ABY", property.GetValue(item)),
-                                    _ => String.Format($"{{0, {width - 3}}}   ", property.GetValue(item))
+                                    < 0  => String.Format($"{{0, {width - 3}}}BBY", -(int)property.GetValue(item)!),
+                                    > 0  => String.Format($"{{0, {width - 3}}}ABY", property.GetValue(item)),
+                                    _    => String.Format($"{{0, {width - 3}}}   ", property.GetValue(item))
                                   }
                                 : String.Format($"{{0, {width}:N0}}", property.GetValue(item)),
-                       Type t when t == typeof(long?) => String.Format($"{{0, {width}:N0}}", property.GetValue(item)),
+                       Type t when t == typeof(long?)  => String.Format($"{{0, {width}:N0}}", property.GetValue(item)),
                        Type t when t == typeof(string) => String.Format($"{{0, -{width}}}", property.GetValue(item))[..width],
                        _ => throw new Exception($"TablePrinter class: Unsupported property type: {property.PropertyType}")
                    })

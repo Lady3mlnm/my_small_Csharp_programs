@@ -15,19 +15,24 @@ After the table, the user can get additional characteristics of quantitative ind
 
 <br>
 
-$$\color{orange}{\text{Warnings and disclaimers}}$$:
+<h3>$$\color{orange}{\text{Warnings and disclaimers}}$$</h3>
+
 * The program is not ideal. For example, in some cases I haven't find a good solution for universal code that can handle multiple types of data, so I've created separate branches for different types. Perhaps I'll improve the program in the future.
-* The data is provided by the learning server and not all information exactly corresponds to what is generally accepted in the "Legends" and "Canon". _(For example, for Palpatine's year of birth the server gives out 82BBY but online sources say 84BBY.) Some numbers in the "Legends" and "Canon" are different (for example, Qui-Gon Jinn was born in 92BBY according to the "Legends", and in 80BBY according to the "Canon").
+* The data is provided by the learning server and not all information exactly corresponds to what is generally accepted in the "Legends" and "Canon". (For example, for Palpatine's year of birth the server gives out 82BBY but online sources say 84BBY.) Some numbers in the "Legends" and "Canon" are different (for example, Qui-Gon Jinn was born in 92BBY according to the "Legends", and in 80BBY according to the "Canon").
 * There are several cases, there the server outputs frantional values (for example, Anakin Skywalker was born at 41.9BBY). Since I wanted to focus on the global structure of the application, in such cases I used rounding.
 
 <br>
 
-Screenshots:
+<h3>$$\color{blue}{\text{Screenshots}}$$</h3>
+
+Exploring charactes:
 ![example of work with request for data about people, start](screenshots/example_of_work_with_request_people-start.png)
 ![example of work with request for data about people, end](screenshots/example_of_work_with_request_people-end.png)
 
+Exploring species:
 ![example of work with request for data about species, start](screenshots/example_of_work_with_request_species-start.png)
 ![example of work with request for data about species, end](screenshots/example_of_work_with_request_species-end.png)
 
-![example of work with request for data about planets, start](screenshots/example_of_work_with_request_species-start.png)
-![example of work with request for data about planets, end](screenshots/example_of_work_with_request_species-end.png)
+Exploring planets:
+![example of work with request for data about planets, start](screenshots/example_of_work_with_request_planets-start.png)
+![example of work with request for data about planets, end](screenshots/example_of_work_with_request_planets-end.png)

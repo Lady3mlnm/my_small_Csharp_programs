@@ -93,7 +93,7 @@ public class StatisticsAnalyzer : IStatisticsAnalyzer
                 Func<T, long?> propertySelector = model => {
                     var value = propertyInfo.GetValue(model, null);
                     return value switch {
-                        int intValue => (long?)intValue,
+                        int intValue   => (long?)intValue,
                         long longValue => (long?)longValue,
                         _ => null
                     };
@@ -161,7 +161,7 @@ public class StatisticsAnalyzer : IStatisticsAnalyzer
                                                       .GetProperty("Name")?
                                                       .GetValue(obj));
         _modelsStatsUserInteractor.ShowMessage(
-            $"{descriptor,-12}: {value,17:N0}" +
+            $"{descriptor,-8}: {value,17:N0}" +
             $"  (models: {string.Join(", ", namesOfObjects)})");
     }
 
@@ -178,7 +178,7 @@ public class StatisticsAnalyzer : IStatisticsAnalyzer
                                                       .GetProperty("Name")?
                                                       .GetValue(obj));
         _modelsStatsUserInteractor.ShowMessage(
-            $"{descriptor,-12}: {value,19:N1}" +
+            $"{descriptor,-8}: {value,19:N1}" +
             ((namesOfObjects.Any())
                 ? $"  (models: {string.Join(", ", namesOfObjects)})"
                 : ""));
