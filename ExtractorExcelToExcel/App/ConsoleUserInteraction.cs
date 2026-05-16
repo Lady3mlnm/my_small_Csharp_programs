@@ -8,12 +8,14 @@ public class ConsoleUserInteraction : IUserInteraction
     private string _columnPositions = "auto";               // "A", "auto", "autoNumbering", "default", "-"
     private string _columnTexts = "C";
     private string _columnTextsOverlay = "H";
+    private bool _preliminarySortSheetByColumnPositions = false;
     private string _rowRange = "2:11";                      // "2:11", "3:5,10,14:16";
     private string? _cellIgnoringMark = "";
     private string _pathOutputExcel = @"Data\Test_Output.xlsx";
     private string _sheetNameOutput = "copyInputSheet";     // "Storage", "copyInputSheet"
     private string _columnTextsOutput = "copyInputColumn";  // "copyInputColumn"
-    private int _headerDepth = 1;      
+    private int _headerDepth = 1;
+    private bool _closeAppAfterExecution = false;
 
     static Dictionary<string, string> ParseArguments(string[] args)
     {
@@ -36,22 +38,26 @@ public class ConsoleUserInteraction : IUserInteraction
         var options = ParseArguments(args);
 
         if(options.TryGetValue("appMode", out var appMode)) {
-            _appMode = (AppMode)Enum.Parse(typeof(AppMode), appMode);
-            ShowMessage("Global mode of the application: " + _appMode, ConsoleColor.Green);
+            if(Enum.TryParse<AppMode>(appMode, true, out AppMode parsedMode) && Enum.IsDefined(typeof(AppMode), parsedMode)) {
+                _appMode = parsedMode;
+                ShowMessage("Global mode of the application: " + _appMode, ConsoleColor.Green);
+            } else
+                throw new ArgumentException($"Invalid value for parameter 'appMode': {appMode}. " +
+                                            $"Use one of the following values: {string.Join(" / ", Enum.GetNames(typeof(AppMode)))}.");
         } else
-            ShowMessage("Global mode of the application is not given. Used default: " + _appMode, ConsoleColor.Red);
+            ShowMessage("Global mode of the application is not given. Used default: " + _appMode, ConsoleColor.DarkGray);
 
         if(options.TryGetValue("pathInputExcel", out var pathInputExcel)) {
             _pathInputExcel = pathInputExcel;
             ShowMessage("Name of Excel file: " + _pathInputExcel, ConsoleColor.Green);
         } else
-            ShowMessage("Name of Excel file is not given. Used default: " + _pathInputExcel, ConsoleColor.Red);
+            ShowMessage("Name of Excel file is not given. Used default: " + _pathInputExcel, ConsoleColor.DarkGray);
 
         if(options.TryGetValue("sheetName", out var sheetName)) {
             _sheetName = sheetName;
             ShowMessage("Name of sheet in the Excel file: " + _sheetName, ConsoleColor.Green);
         } else
-            ShowMessage("Name of sheet in the Excel file is not given. Used default: " + _sheetName, ConsoleColor.Red);
+            ShowMessage("Name of sheet in the Excel file is not given. Used default: " + _sheetName, ConsoleColor.DarkGray);
 
         if(options.TryGetValue("columnPositions", out var columnPositions)) {
             if(columnPositions is "auto" or "-" or "autoNumbering" or "auto-numbering" or "default") {
@@ -62,29 +68,35 @@ public class ConsoleUserInteraction : IUserInteraction
                 ShowMessage("Column with ids: " + _columnPositions, ConsoleColor.Green);
             }
         } else
-            ShowMessage("Column with string positions is not given. Used default: " + _columnPositions, ConsoleColor.Red);
+            ShowMessage("Column with string positions is not given. Used default: " + _columnPositions, ConsoleColor.DarkGray);
 
         string refinementOfPhrase = (_appMode == AppMode.combineTwoColumns) ? "original" : "extracted";
         if(options.TryGetValue("columnTexts", out var columnTexts)) {
             _columnTexts = columnTexts;
             ShowMessage($"Column with {refinementOfPhrase} texts: {_columnTexts}", ConsoleColor.Green);
         } else
-            ShowMessage($"Column with {refinementOfPhrase} texts is not given. Used default: {_columnTexts}", ConsoleColor.Red);
+            ShowMessage($"Column with {refinementOfPhrase} texts is not given. Used default: {_columnTexts}", ConsoleColor.DarkGray);
 
         if(_appMode == AppMode.combineTwoColumns) {
             if(options.TryGetValue("columnTextsOverlay", out var columnTextsOverlay)) {
                 _columnTextsOverlay = columnTextsOverlay;
                 ShowMessage("Column with overlay texts: " + _columnTextsOverlay, ConsoleColor.Green);
             } else
-                ShowMessage("Column with overlay texts is not given. Used default: " + _columnTextsOverlay, ConsoleColor.Red);
+                ShowMessage("Column with overlay texts is not given. Used default: " + _columnTextsOverlay, ConsoleColor.DarkGray);
         } else
             _columnTextsOverlay = "";
+
+        if(options.TryGetValue("preliminarySortSheetByColumnPositions", out var preliminarySortSheetByColumnPositions)) {
+            _preliminarySortSheetByColumnPositions = bool.Parse(preliminarySortSheetByColumnPositions);
+            ShowMessage(@"Sort the sheet by columnPositions before taking rowRange: " + _preliminarySortSheetByColumnPositions, ConsoleColor.Green);
+        } else
+            ShowMessage(@"Parameter whether to sort the sheet by columnPositions before taking rowRange is not given. Used default: " + _preliminarySortSheetByColumnPositions, ConsoleColor.DarkGray);
 
         if(options.TryGetValue("rowRange", out var rowRange)) {
             _rowRange = rowRange;
             ShowMessage("Range of rows to process: " + _rowRange, ConsoleColor.Green);
         } else
-            ShowMessage("Range of rows is not given. Used default: " + _rowRange, ConsoleColor.Red);
+            ShowMessage("Range of rows is not given. Used default: " + _rowRange, ConsoleColor.DarkGray);
 
         if(options.TryGetValue("cellIgnoringMark", out var cellIgnoringMark)) {
             if(_cellIgnoringMark == "doNotUseCellIgnoring") {
@@ -95,51 +107,61 @@ public class ConsoleUserInteraction : IUserInteraction
                 ShowMessage($"The contents of a cell indicating that the cell has to be ignored: >{_cellIgnoringMark}<", ConsoleColor.Green);
             }
         } else
-            ShowMessage($"The contents of a cell indicating that the cell has to be ignored is not given. Used default: >{_cellIgnoringMark}<", ConsoleColor.Red);
+            ShowMessage($"The contents of a cell indicating that the cell has to be ignored is not given. Used default: >{_cellIgnoringMark}<", ConsoleColor.DarkGray);
 
         if(options.TryGetValue("pathOutputExcel", out var pathOutputExcel)) {
             _pathOutputExcel = pathOutputExcel;
             ShowMessage("Name of output Excel file: " + _pathOutputExcel, ConsoleColor.Green);
         } else
-            ShowMessage("Name of output Excel file is not given. Used default: " + _pathOutputExcel, ConsoleColor.Red);
+            ShowMessage("Name of output Excel file is not given. Used default: " + _pathOutputExcel, ConsoleColor.DarkGray);
 
         if(options.TryGetValue("sheetNameOutput", out var sheetNameOutput)) {
             _sheetNameOutput = sheetNameOutput;
             ShowMessage("Name of sheet in the output Excel file: " + _sheetNameOutput, ConsoleColor.Green);
         } else
-            ShowMessage("Name of sheet in the output Excel file is not given. Used default: " + _sheetNameOutput, ConsoleColor.Red);
+            ShowMessage("Name of sheet in the output Excel file is not given. Used default: " + _sheetNameOutput, ConsoleColor.DarkGray);
         if(_sheetNameOutput == "copyInputSheet") {
             _sheetNameOutput = _sheetName;
-            ShowMessage($"     (That means their will be used the sheet '{_sheetNameOutput}')");
+            ShowMessage($"     (That means their will be used the sheet '{_sheetNameOutput}')", ConsoleColor.DarkGray);
         }
 
         if(options.TryGetValue("columnTextsOutput", out var columnTextsOutput)) {
             _columnTextsOutput = columnTextsOutput;
             ShowMessage($"Column in the output Excel for extracted texts: {_columnTextsOutput}", ConsoleColor.Green);
         } else
-            ShowMessage($"Column in the output Excel for extracted texts is not given. Used default: {_columnTextsOutput}", ConsoleColor.Red);
+            ShowMessage($"Column in the output Excel for extracted texts is not given. Used default: {_columnTextsOutput}", ConsoleColor.DarkGray);
         if(_columnTextsOutput == "copyInputColumn") {
             _columnTextsOutput = _columnTexts;
-            ShowMessage($"     (That means their will be used the column '{_columnTextsOutput}')");
+            ShowMessage($"     (That means their will be used the column '{_columnTextsOutput}')", ConsoleColor.DarkGray);
         }
 
         if(options.TryGetValue("headerDepth", out var headerDepth)) {
-            if(int.TryParse(headerDepth, out var headerDepthInt) && headerDepthInt >= 0) {
+            if(int.TryParse(headerDepth, out int headerDepthInt) && headerDepthInt >= 0) {
                 _headerDepth = headerDepthInt;
                 ShowMessage($"Number of rows in header of the output Excel: {_headerDepth}", ConsoleColor.Green);
             } else
-                ShowMessage($"Invalid value for 'headerDepth': {headerDepth}. Used default: {_headerDepth}", ConsoleColor.Red);
+                throw new ArgumentException($"Invalid value for parameter 'headerDepth': {headerDepth}. It should be a non-negative integer.");
         } else
-            ShowMessage($"Number of rows in header of the output Excel is not given. Used default: {_headerDepth}", ConsoleColor.Red);
+            ShowMessage($"Number of rows in header of the output Excel is not given. Used default: {_headerDepth}", ConsoleColor.DarkGray);
+
+        if(options.TryGetValue("closeAppAfterExecution", out var closeAppAfterExecution)) {
+            if(bool.TryParse(closeAppAfterExecution, out bool parsedValue)) {
+                _closeAppAfterExecution = parsedValue;
+                ShowMessage(@"Close the application after execution without waiting for user confirmation: " + _closeAppAfterExecution, ConsoleColor.Green);
+            } else
+                throw new ArgumentException($"Invalid value for parameter 'closeAppAfterExecution': {closeAppAfterExecution}. It should be a boolean.");
+        } else
+            ShowMessage(@"Parameter whether to close the application after execution without confirmation is not given. Used default: " + _closeAppAfterExecution, ConsoleColor.DarkGray);
     }
 
 
-    public (AppMode appMode, string pathInputExcel, string sheetName, string columnPositions,
-        string columnTexts, string columnTextsOverlay, string rowRange, string? cellIgnoringMark,
-        string pathOutputExcel, string sheetNameOutput, string columnTextsOutput, int headerDepth)
+    public (AppMode appMode, string pathInputExcel, string sheetName, string columnPositions, string columnTexts,
+        string columnTextsOverlay, bool preliminarySortSheetByColumnPositions, string rowRange, string? cellIgnoringMark,
+        string pathOutputExcel, string sheetNameOutput, string columnTextsOutput, int headerDepth, bool closeAppAfterExecution)
         GetParameters() =>
-        (_appMode, _pathInputExcel, _sheetName, _columnPositions, _columnTexts, _columnTextsOverlay,
-        _rowRange, _cellIgnoringMark, _pathOutputExcel, _sheetNameOutput, _columnTextsOutput, _headerDepth);
+        (_appMode, _pathInputExcel, _sheetName, _columnPositions, _columnTexts,
+        _columnTextsOverlay, _preliminarySortSheetByColumnPositions, _rowRange, _cellIgnoringMark,
+        _pathOutputExcel, _sheetNameOutput, _columnTextsOutput, _headerDepth, _closeAppAfterExecution);
 
 
     public void ShowMessage(string message, bool isLinebreakAdded = true)
@@ -182,3 +204,13 @@ public class ConsoleUserInteraction : IUserInteraction
         Console.ReadKey();
     }
 }
+
+
+
+
+//// More primitive way to parse the appMode parameter without validation:
+//if(options.TryGetValue("appMode", out var appMode)) {
+//    _appMode = Enum.Parse<AppMode>(appMode);
+//    ShowMessage("Global mode of the application: " + _appMode, ConsoleColor.Green);
+//} else
+//    ShowMessage("Global mode of the application is not given. Used default: " + _appMode, ConsoleColor.DarkGray);

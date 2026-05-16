@@ -23,22 +23,26 @@ public class ExtractorExcelToExcelApp
         string columnPositions;
         string columnTexts;
         string columnTextsOverlay;
+        bool preliminarySortSheetByColumnPositions;
         string rowRange;
         string? cellIgnoringMark;
         string pathOutputExcel;
         string sheetNameOutput;
         string columnTextsOutput;
         int headerDepth;
+        bool closeAppAfterExecution;
 
         Stopwatch stopwatch = Stopwatch.StartNew();
 
-        (appMode, pathInputExcel, sheetName, columnPositions, columnTexts, columnTextsOverlay,
-         rowRange, cellIgnoringMark, pathOutputExcel, sheetNameOutput, columnTextsOutput, headerDepth) =
+        (appMode, pathInputExcel, sheetName, columnPositions, columnTexts,
+         columnTextsOverlay, preliminarySortSheetByColumnPositions, rowRange, cellIgnoringMark,
+         pathOutputExcel, sheetNameOutput, columnTextsOutput, headerDepth, closeAppAfterExecution) =
              _userInteraction.GetParameters();
 
         Record[] records =
-            _repository.ReadRecordsFromRepository(pathInputExcel, appMode, sheetName, columnPositions,
-                                                 columnTexts, columnTextsOverlay, rowRange, cellIgnoringMark);
+            _repository.ReadRecordsFromRepository(pathInputExcel, appMode, sheetName,
+                                                  columnPositions, columnTexts, columnTextsOverlay,
+                                                  preliminarySortSheetByColumnPositions, rowRange, cellIgnoringMark);
 
         _userInteraction.ShowMessage("\nNumber of strings extracted from Excel: " + records.Count());
         _userInteraction.ShowMessage("First ten position-string pairs:");
@@ -51,6 +55,8 @@ public class ExtractorExcelToExcelApp
 
         stopwatch.Stop();
         _userInteraction.ShowMessage($"Total time of the application work : {(double)stopwatch.ElapsedMilliseconds / 1000:F3} sec", ConsoleColor.Yellow);
-        _userInteraction.GetCloseAppConfirmation();
+
+        if(!closeAppAfterExecution)
+            _userInteraction.GetCloseAppConfirmation();
     }
 }

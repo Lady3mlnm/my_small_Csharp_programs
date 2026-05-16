@@ -3,10 +3,11 @@ It is a modification of my other program [ExtractorExcelToText](../ExtractorExce
 
 To launch the application with parameters, it is convenient to use a bat-file. The folder <code>[files_for_test](./files_for_test)</code> contains ReadMe with explanation of parameters and examples of bat-files. Place contents of that folder in directory with built application and launch the bat-file so the application can demonstrate its work.
 
-Options that can be transmit to the program via parameters:
+Some options that can be transmit to the program via parameters:
 - mode: extract one column or combine two columns;
 - whether positions of strings are determined in a separate columns of the input Excel file or auto-numberings is used;
 - flexible selection of rows in the Excel file for processing, including ability to ignore certain cells;
+- preliminary sorting of worksheet by column with positions of strings before taking selection of rows that can be required in some complex projects.
 
 ![screenshot of the application](./screenshots/screenshot_of_ExtractorExcelToExcel_1.png)
 
