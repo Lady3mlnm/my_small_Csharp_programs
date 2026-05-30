@@ -2,13 +2,13 @@
 
 start ExtractorExcelToExcel.exe ^
 	--appMode=extractOneColumn ^
-	--pathInputExcel=Data\Not_existing_input_file.xlsx ^
-	--sheetName="Amino Acids" ^
+	--pathExcelInput=Data\Not_existing_input_file.xlsx ^
+	--sheetInput="Amino Acids" ^
 	--columnPositions=A ^
-	--columnTexts=C ^
-	--rowRange=2:4,6,10:15 ^
+	--columnTextsInput=C ^
+	--rowRangeInput=2:4,6,10:15 ^
 	--cellIgnoringMark="" ^
-	--pathOutputExcel=Data\Test_Output.xlsx ^
-	--sheetNameOutput="TestStorage" ^
+	--pathExcelOutput=Data\Test_Output.xlsx ^
+	--sheetOutput="TestStorage" ^
 	--columnTextsOutput=B ^
-	--headerDepth=1
+	--headerDepthOutput=1

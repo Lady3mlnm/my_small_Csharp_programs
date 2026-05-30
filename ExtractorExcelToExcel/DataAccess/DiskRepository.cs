@@ -1,48 +1,64 @@
-﻿using ClosedXML.Excel;
-using ExtractorExcelToExcel.App;
+﻿using ExtractorExcelToExcel.App;
 using ExtractorExcelToExcel.DataStructures;
-using System;
-using System.Text.RegularExpressions;
-
 namespace ExtractorExcelToExcel.DataAccess;
+using ClosedXML.Excel;
+using System.Text.RegularExpressions;
 
 internal class DiskRepository : IRepository
 {
-    public Record[] ReadRecordsFromRepository(string pathInputExcel, AppMode appMode, string sheetName,
-                                              string columnPositions, string columnTexts, string columnTextsOverlay,
-                                              bool preliminarySortSheetByColumnPositions, string rowRange, string? cellIgnoringMark)
+    public Record[] ReadRecordsFromRepository(
+        string pathExcelInput, AppMode appMode, string sheetInput,
+        string columnPositions, string columnTextsInput, string columnTextsOverlay,
+        bool preliminarySortSheetByColumnPositions, int headerDepthInput, string rowRangeInput, string? cellIgnoringMark)
     {
-        if(!File.Exists(pathInputExcel))
-            throw new FileNotFoundException($"File with name '{pathInputExcel}' ({Path.GetFullPath(pathInputExcel)}) does not exist");
+        if(!File.Exists(pathExcelInput))
+            throw new FileNotFoundException($"File with name '{pathExcelInput}' ({Path.GetFullPath(pathExcelInput)}) does not exist");
 
-        using(var fileStream = new FileStream(pathInputExcel, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+        using(var fileStream = new FileStream(pathExcelInput, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
             var workbook = new XLWorkbook(fileStream);
-            if(workbook.TryGetWorksheet(sheetName, out IXLWorksheet worksheet)) {
-                if(preliminarySortSheetByColumnPositions && columnPositions != "auto") {
-                    var lastRow = worksheet.LastRowUsed().RowNumber();
-                    var lastCol = worksheet.LastColumnUsed().ColumnNumber();
-                    const int headerDepthInput = 1;
-                    var dataRange = worksheet.Range(
-                        1 + headerDepthInput,   // first row
-                        1,                      // first column
-                        lastRow,                // last row
-                        lastCol);               // last column
-                    dataRange.Sort(columnPositions);
-                    //PrintWorksheet(worksheet);  // Debugging: check if the sheet is sorted preliminary correctly
-                }
+            if(workbook.TryGetWorksheet(sheetInput, out IXLWorksheet worksheet)) {
+                if(worksheet.IsEmpty())
+                    throw new InvalidOperationException($"Worksheet '{worksheet}' is empty");  // Early termination of the application to avoid unclear error further
+
+                if(preliminarySortSheetByColumnPositions && columnPositions != "auto")
+                    preliminarySortOfWorksheet(ref worksheet, headerDepthInput, columnPositions);
+
+                clarifyRowRange(ref rowRangeInput, worksheet, headerDepthInput);
 
                 IEnumerable<Record> recordsFlow = appMode switch {
-                    AppMode.extractOneColumn  => ReadExcelColumn(worksheet, columnPositions, columnTexts, rowRange, cellIgnoringMark),
-                    AppMode.combineTwoColumns => ReadExcelTwoColumnsCombined(worksheet, columnPositions, columnTexts, columnTextsOverlay, rowRange, cellIgnoringMark),
+                    AppMode.extractOneColumn  => ReadExcelColumn(worksheet, columnPositions, columnTextsInput, rowRangeInput, cellIgnoringMark),
+                    AppMode.combineTwoColumns => ReadExcelTwoColumnsCombined(worksheet, columnPositions, columnTextsInput, columnTextsOverlay, rowRangeInput, cellIgnoringMark),
                     _ => throw new ArgumentException("Reading from repository using unsupported mode: " + appMode),
                 };
 
                 return recordsFlow.OrderBy(record => record.Position)
                                   .ToArray();
-            } else {
-                throw new ArgumentException($"The file '{pathInputExcel}' doesn't contain a worksheet with name '{sheetName}'");
-            }
+            } else
+                throw new ArgumentException($"The file '{pathExcelInput}' doesn't contain a worksheet with name '{sheetInput}'");
         }
+    }
+
+
+    private void preliminarySortOfWorksheet(ref IXLWorksheet worksheet, int headerDepth, string columnSorting)
+    {
+        int lastRow = worksheet.LastRowUsed()?.RowNumber() ?? 0;
+        int lastCol = worksheet.LastColumnUsed()?.ColumnNumber() ?? 0;
+        var dataRange = worksheet.Range(
+            1 + headerDepth,   // first row
+            1,                      // first column
+            lastRow,                // last row
+            lastCol);               // last column
+        dataRange.Sort(columnSorting);
+        //PrintWorksheet(worksheet);  // Debugging: check if the sheet is sorted preliminary correctly
+    }
+
+
+    private void clarifyRowRange(ref string rowRange, IXLWorksheet worksheet, int headerDepth)
+    {
+        if(rowRange.StartsWith(':'))
+            rowRange = (headerDepth + 1) + rowRange;
+        if(rowRange.EndsWith(':'))
+            rowRange = rowRange + (worksheet.LastRowUsed()?.RowNumber() ?? 0);
     }
 
 
@@ -63,8 +79,11 @@ internal class DiskRepository : IRepository
             IEnumerable<int> iePos = worksheet.Cells(searchPositions)
                                               .Select(cell => int.Parse(cell.Value.ToString()));
 
+            //Console.WriteLine(iePos.Count());
+            
+
             return ieTexts.Zip(iePos, (st, pos) => new Record(pos, st))
-                .Where(record => record.Text != cellIgnoringMark);
+                          .Where(record => record.Text != cellIgnoringMark);
         }
     }
 
@@ -97,8 +116,7 @@ internal class DiskRepository : IRepository
         }
     }
 
-
-    public void WriteRecordsToRepository(IEnumerable<Record> records, string pathOutputExcel, string sheetNameOutput, string columnTextsOutput, int headerDepth)
+    public void WriteRecordsToRepository(IEnumerable<Record> records, string pathOutputExcel, string sheetNameOutput, string columnTextsOutput, int headerDepthOutput)
     {
         if(!File.Exists(pathOutputExcel))
             throw new FileNotFoundException($"File with name '{pathOutputExcel}' ({Path.GetFullPath(pathOutputExcel)}) does not exist");
@@ -107,7 +125,7 @@ internal class DiskRepository : IRepository
             var workbook = new XLWorkbook(fileStream);
             if(workbook.TryGetWorksheet(sheetNameOutput, out IXLWorksheet worksheet)) {
                 foreach(var record in records)
-                    worksheet.Cell($"{columnTextsOutput}{record.Position + headerDepth}").Value = record.Text;
+                    worksheet.Cell($"{columnTextsOutput}{record.Position + headerDepthOutput}").Value = record.Text;
                 workbook.Save();
             } else {
                 throw new ArgumentException($"The file '{pathOutputExcel}' doesn't contain a worksheet with name '{sheetNameOutput}'");

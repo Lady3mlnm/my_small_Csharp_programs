@@ -2,9 +2,9 @@
 
 public interface IUserInteraction
 {
-    (AppMode appMode, string pathInputExcel, string sheetName, string columnPositions, string columnTexts,
-        string columnTextsOverlay, bool preliminarySortSheetByColumnPositions, string rowRange, string? cellIgnoringMark,
-        string pathOutputExcel, string sheetNameOutput, string columnTextsOutput, int headerDepth, bool closeAppAfterExecution)
+    (AppMode appMode, string pathExcelInput, string sheetInput, string columnPositions, string columnTextsInput,
+        string columnTextsOverlay, bool preliminarySortSheetByColumnPositions, int headerDepthInput, string rowRangeInput, string? cellIgnoringMark,
+        string pathExcelOutput, string sheetOutput, string columnTextsOutput, int headerDepthOutput, bool closeAppAfterExecution)
         GetParameters();
     void ShowMessage(string message, bool isLinebreakAdded = true);
     void ShowMessage(string message, ConsoleColor color, bool isLinebreakAdded = true);

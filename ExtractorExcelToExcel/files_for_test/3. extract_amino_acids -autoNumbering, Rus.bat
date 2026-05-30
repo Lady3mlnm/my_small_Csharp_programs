@@ -5,13 +5,13 @@ copy Data\Test_base.xlsx Data\Test_Output.xlsx
 
 start ExtractorExcelToExcel.exe ^
 	--appMode=extractOneColumn ^
-	--pathInputExcel=Data\Test_Input.xlsx ^
-	--sheetName="Amino Acids" ^
+	--pathExcelInput=Data\Test_Input.xlsx ^
+	--sheetInput="Amino Acids" ^
 	--columnPositions=autoNumbering ^
-	--columnTexts=D ^
-	--rowRange=2:4,6,10:15 ^
+	--columnTextsInput=D ^
+	--rowRangeInput=2:4,6,10:15 ^
 	--cellIgnoringMark="" ^
-	--pathOutputExcel=Data\Test_Output.xlsx ^
-	--sheetNameOutput="TestStorage" ^
+	--pathExcelOutput=Data\Test_Output.xlsx ^
+	--sheetOutput="TestStorage" ^
 	--columnTextsOutput=C ^
-	--headerDepth=1
+	--headerDepthOutput=1

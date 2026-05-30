@@ -7,7 +7,8 @@ Some options that can be transmit to the program via parameters:
 - mode: extract one column or combine two columns;
 - whether positions of strings are determined in a separate columns of the input Excel file or auto-numberings is used;
 - flexible selection of rows in the Excel file for processing, including ability to ignore certain cells;
-- preliminary sorting of worksheet by column with positions of strings before taking selection of rows that can be required in some complex projects.
+- preliminary sorting of worksheet by column with positions of strings before taking selection of rows that can be required in some complex projects;
+- сorrection of the program behavior for different header depths in input and output files.
 
 ![screenshot of the application](./screenshots/screenshot_of_ExtractorExcelToExcel_1.png)
 

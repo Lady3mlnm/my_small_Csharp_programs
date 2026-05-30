@@ -18,38 +18,39 @@ public class ExtractorExcelToExcelApp
     public void Run()
     {
         AppMode appMode;
-        string pathInputExcel;
-        string sheetName;
+        string pathExcelInput;
+        string sheetInput;
         string columnPositions;
-        string columnTexts;
+        string columnTextsInput;
         string columnTextsOverlay;
         bool preliminarySortSheetByColumnPositions;
+        int headerDepthInput;
         string rowRange;
         string? cellIgnoringMark;
-        string pathOutputExcel;
-        string sheetNameOutput;
+        string pathExcelOutput;
+        string sheetOutput;
         string columnTextsOutput;
-        int headerDepth;
+        int headerDepthOutput;
         bool closeAppAfterExecution;
 
         Stopwatch stopwatch = Stopwatch.StartNew();
 
-        (appMode, pathInputExcel, sheetName, columnPositions, columnTexts,
-         columnTextsOverlay, preliminarySortSheetByColumnPositions, rowRange, cellIgnoringMark,
-         pathOutputExcel, sheetNameOutput, columnTextsOutput, headerDepth, closeAppAfterExecution) =
+        (appMode, pathExcelInput, sheetInput, columnPositions, columnTextsInput,
+         columnTextsOverlay, preliminarySortSheetByColumnPositions, headerDepthInput, rowRange, cellIgnoringMark,
+         pathExcelOutput, sheetOutput, columnTextsOutput, headerDepthOutput, closeAppAfterExecution) =
              _userInteraction.GetParameters();
 
         Record[] records =
-            _repository.ReadRecordsFromRepository(pathInputExcel, appMode, sheetName,
-                                                  columnPositions, columnTexts, columnTextsOverlay,
-                                                  preliminarySortSheetByColumnPositions, rowRange, cellIgnoringMark);
+            _repository.ReadRecordsFromRepository(pathExcelInput, appMode, sheetInput,
+                                                  columnPositions, columnTextsInput, columnTextsOverlay,
+                                                  preliminarySortSheetByColumnPositions, headerDepthInput, rowRange, cellIgnoringMark);
 
-        _userInteraction.ShowMessage("\nNumber of strings extracted from Excel: " + records.Count());
+        _userInteraction.ShowMessage("\nNumber of strings extracted from Excel: " + records.Length);
         _userInteraction.ShowMessage("First ten position-string pairs:");
         _userInteraction.ShowMessage(records[0..Math.Min(10, records.Length)].Select(record => record.ToString()),
                                      ConsoleColor.Cyan);
 
-        _repository.WriteRecordsToRepository(records, pathOutputExcel, sheetNameOutput, columnTextsOutput, headerDepth);
+        _repository.WriteRecordsToRepository(records, pathExcelOutput, sheetOutput, columnTextsOutput, headerDepthOutput);
 
         _userInteraction.ShowMessage('\n' + "The app completed its work.");
 

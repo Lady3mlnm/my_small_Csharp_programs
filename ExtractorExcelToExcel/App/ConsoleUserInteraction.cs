@@ -3,18 +3,19 @@
 public class ConsoleUserInteraction : IUserInteraction
 {
     private AppMode _appMode = AppMode.extractOneColumn;    // AppMode.extractOneColumn / AppMode.combineTwoColumns
-    private string _pathInputExcel = @"Data\Test_Input.xlsx";
-    private string _sheetName = "TestSheet";                // "Amino Acids"
-    private string _columnPositions = "auto";               // "A", "auto", "autoNumbering", "default", "-"
-    private string _columnTexts = "C";
+    private string _pathExcelInput = @"Data\Test_Input.xlsx";
+    private string _sheetInput = "TestSheet";               // "Amino Acids", "TestSheet"
+    private string _columnPositions = "A";                  // "A", "auto", "autoNumbering", "default", "-"
+    private string _columnTextsInput = "C";
     private string _columnTextsOverlay = "H";
     private bool _preliminarySortSheetByColumnPositions = false;
-    private string _rowRange = "2:11";                      // "2:11", "3:5,10,14:16";
-    private string? _cellIgnoringMark = "";
-    private string _pathOutputExcel = @"Data\Test_Output.xlsx";
-    private string _sheetNameOutput = "copyInputSheet";     // "Storage", "copyInputSheet"
+    private int _headerDepthInput = 1;
+    private string _rowRangeInput = "2:11";                 // "2:11", "3:5,10,14:16", ":", ":6"
+    private string? _cellIgnoringMark = "";                 // "doNotUseCellIgnoring"
+    private string _pathExcelOutput = @"Data\Test_Output.xlsx";
+    private string _sheetOutput = "copyInputSheet";         // "Storage", "copyInputSheet"
     private string _columnTextsOutput = "copyInputColumn";  // "copyInputColumn"
-    private int _headerDepth = 1;
+    private int _headerDepthOutput = 1;
     private bool _closeAppAfterExecution = false;
 
     static Dictionary<string, string> ParseArguments(string[] args)
@@ -47,17 +48,17 @@ public class ConsoleUserInteraction : IUserInteraction
         } else
             ShowMessage("Global mode of the application is not given. Used default: " + _appMode, ConsoleColor.DarkGray);
 
-        if(options.TryGetValue("pathInputExcel", out var pathInputExcel)) {
-            _pathInputExcel = pathInputExcel;
-            ShowMessage("Name of Excel file: " + _pathInputExcel, ConsoleColor.Green);
+        if(options.TryGetValue("pathExcelInput", out var pathExcelInput)) {
+            _pathExcelInput = pathExcelInput;
+            ShowMessage("Name of input Excel file: " + _pathExcelInput, ConsoleColor.Green);
         } else
-            ShowMessage("Name of Excel file is not given. Used default: " + _pathInputExcel, ConsoleColor.DarkGray);
+            ShowMessage("Name of input Excel file is not given. Used default: " + _pathExcelInput, ConsoleColor.DarkGray);
 
-        if(options.TryGetValue("sheetName", out var sheetName)) {
-            _sheetName = sheetName;
-            ShowMessage("Name of sheet in the Excel file: " + _sheetName, ConsoleColor.Green);
+        if(options.TryGetValue("sheetInput", out var sheetInput)) {
+            _sheetInput = sheetInput;
+            ShowMessage("Name of sheet in the input Excel file: " + _sheetInput, ConsoleColor.Green);
         } else
-            ShowMessage("Name of sheet in the Excel file is not given. Used default: " + _sheetName, ConsoleColor.DarkGray);
+            ShowMessage("Name of sheet in the input Excel file is not given. Used default: " + _sheetInput, ConsoleColor.DarkGray);
 
         if(options.TryGetValue("columnPositions", out var columnPositions)) {
             if(columnPositions is "auto" or "-" or "autoNumbering" or "auto-numbering" or "default") {
@@ -65,17 +66,17 @@ public class ConsoleUserInteraction : IUserInteraction
                 _columnPositions = "auto";
             } else {
                 _columnPositions = columnPositions;
-                ShowMessage("Column with ids: " + _columnPositions, ConsoleColor.Green);
+                ShowMessage("Column with string positions: " + _columnPositions, ConsoleColor.Green);
             }
         } else
             ShowMessage("Column with string positions is not given. Used default: " + _columnPositions, ConsoleColor.DarkGray);
 
         string refinementOfPhrase = (_appMode == AppMode.combineTwoColumns) ? "original" : "extracted";
-        if(options.TryGetValue("columnTexts", out var columnTexts)) {
-            _columnTexts = columnTexts;
-            ShowMessage($"Column with {refinementOfPhrase} texts: {_columnTexts}", ConsoleColor.Green);
+        if(options.TryGetValue("columnTextsInput", out var columnTextsInput)) {
+            _columnTextsInput = columnTextsInput;
+            ShowMessage($"Column with {refinementOfPhrase} texts: {_columnTextsInput}", ConsoleColor.Green);
         } else
-            ShowMessage($"Column with {refinementOfPhrase} texts is not given. Used default: {_columnTexts}", ConsoleColor.DarkGray);
+            ShowMessage($"Column with {refinementOfPhrase} texts is not given. Used default: {_columnTextsInput}", ConsoleColor.DarkGray);
 
         if(_appMode == AppMode.combineTwoColumns) {
             if(options.TryGetValue("columnTextsOverlay", out var columnTextsOverlay)) {
@@ -88,15 +89,24 @@ public class ConsoleUserInteraction : IUserInteraction
 
         if(options.TryGetValue("preliminarySortSheetByColumnPositions", out var preliminarySortSheetByColumnPositions)) {
             _preliminarySortSheetByColumnPositions = bool.Parse(preliminarySortSheetByColumnPositions);
-            ShowMessage(@"Sort the sheet by columnPositions before taking rowRange: " + _preliminarySortSheetByColumnPositions, ConsoleColor.Green);
+            ShowMessage(@"Sort the sheet by columnPositions before taking rowRangeInput: " + _preliminarySortSheetByColumnPositions, ConsoleColor.Green);
         } else
-            ShowMessage(@"Parameter whether to sort the sheet by columnPositions before taking rowRange is not given. Used default: " + _preliminarySortSheetByColumnPositions, ConsoleColor.DarkGray);
+            ShowMessage(@"Parameter whether to sort the sheet by columnPositions before taking rowRangeInput is not given. Used default: " + _preliminarySortSheetByColumnPositions, ConsoleColor.DarkGray);
 
-        if(options.TryGetValue("rowRange", out var rowRange)) {
-            _rowRange = rowRange;
-            ShowMessage("Range of rows to process: " + _rowRange, ConsoleColor.Green);
+        if(options.TryGetValue("headerDepthInput", out var headerDepthInput)) {
+            if(int.TryParse(headerDepthInput, out int headerDepthInt) && headerDepthInt >= 0) {
+                _headerDepthInput = headerDepthInt;
+                ShowMessage($"Number of rows in header of the input Excel: {_headerDepthInput}", ConsoleColor.Green);
+            } else
+                throw new ArgumentException($"Invalid value for parameter 'headerDepthInput': {headerDepthInput}. It should be a non-negative integer.");
         } else
-            ShowMessage("Range of rows is not given. Used default: " + _rowRange, ConsoleColor.DarkGray);
+            ShowMessage($"Number of rows in header of the input Excel is not given. Used default: {_headerDepthInput}", ConsoleColor.DarkGray);
+
+        if(options.TryGetValue("rowRangeInput", out var rowRangeInput)) {
+            _rowRangeInput = rowRangeInput.Trim();
+            ShowMessage("Range of inputrows to process: " + _rowRangeInput, ConsoleColor.Green);
+        } else
+            ShowMessage("Range of input rows is not given. Used default: " + _rowRangeInput, ConsoleColor.DarkGray);
 
         if(options.TryGetValue("cellIgnoringMark", out var cellIgnoringMark)) {
             if(_cellIgnoringMark == "doNotUseCellIgnoring") {
@@ -109,20 +119,20 @@ public class ConsoleUserInteraction : IUserInteraction
         } else
             ShowMessage($"The contents of a cell indicating that the cell has to be ignored is not given. Used default: >{_cellIgnoringMark}<", ConsoleColor.DarkGray);
 
-        if(options.TryGetValue("pathOutputExcel", out var pathOutputExcel)) {
-            _pathOutputExcel = pathOutputExcel;
-            ShowMessage("Name of output Excel file: " + _pathOutputExcel, ConsoleColor.Green);
+        if(options.TryGetValue("pathExcelOutput", out var pathExcelOutput)) {
+            _pathExcelOutput = pathExcelOutput;
+            ShowMessage("Name of output Excel file: " + _pathExcelOutput, ConsoleColor.Green);
         } else
-            ShowMessage("Name of output Excel file is not given. Used default: " + _pathOutputExcel, ConsoleColor.DarkGray);
+            ShowMessage("Name of output Excel file is not given. Used default: " + _pathExcelOutput, ConsoleColor.DarkGray);
 
-        if(options.TryGetValue("sheetNameOutput", out var sheetNameOutput)) {
-            _sheetNameOutput = sheetNameOutput;
-            ShowMessage("Name of sheet in the output Excel file: " + _sheetNameOutput, ConsoleColor.Green);
+        if(options.TryGetValue("sheetOutput", out var sheetOutput)) {
+            _sheetOutput = sheetOutput;
+            ShowMessage("Name of sheet in the output Excel file: " + _sheetOutput, ConsoleColor.Green);
         } else
-            ShowMessage("Name of sheet in the output Excel file is not given. Used default: " + _sheetNameOutput, ConsoleColor.DarkGray);
-        if(_sheetNameOutput == "copyInputSheet") {
-            _sheetNameOutput = _sheetName;
-            ShowMessage($"     (That means their will be used the sheet '{_sheetNameOutput}')", ConsoleColor.DarkGray);
+            ShowMessage("Name of sheet in the output Excel file is not given. Used default: " + _sheetOutput, ConsoleColor.DarkGray);
+        if(_sheetOutput == "copyInputSheet") {
+            _sheetOutput = _sheetInput;
+            ShowMessage($"     (That means their will be used the sheet '{_sheetOutput}')", ConsoleColor.DarkGray);
         }
 
         if(options.TryGetValue("columnTextsOutput", out var columnTextsOutput)) {
@@ -131,18 +141,18 @@ public class ConsoleUserInteraction : IUserInteraction
         } else
             ShowMessage($"Column in the output Excel for extracted texts is not given. Used default: {_columnTextsOutput}", ConsoleColor.DarkGray);
         if(_columnTextsOutput == "copyInputColumn") {
-            _columnTextsOutput = _columnTexts;
+            _columnTextsOutput = _columnTextsInput;
             ShowMessage($"     (That means their will be used the column '{_columnTextsOutput}')", ConsoleColor.DarkGray);
         }
 
-        if(options.TryGetValue("headerDepth", out var headerDepth)) {
-            if(int.TryParse(headerDepth, out int headerDepthInt) && headerDepthInt >= 0) {
-                _headerDepth = headerDepthInt;
-                ShowMessage($"Number of rows in header of the output Excel: {_headerDepth}", ConsoleColor.Green);
+        if(options.TryGetValue("headerDepthOutput", out var headerDepthOutput)) {
+            if(int.TryParse(headerDepthOutput, out int headerDepthInt) && headerDepthInt >= 0) {
+                _headerDepthOutput = headerDepthInt;
+                ShowMessage($"Number of rows in header of the output Excel: {_headerDepthOutput}", ConsoleColor.Green);
             } else
-                throw new ArgumentException($"Invalid value for parameter 'headerDepth': {headerDepth}. It should be a non-negative integer.");
+                throw new ArgumentException($"Invalid value for parameter 'headerDepthOutput': {headerDepthOutput}. It should be a non-negative integer.");
         } else
-            ShowMessage($"Number of rows in header of the output Excel is not given. Used default: {_headerDepth}", ConsoleColor.DarkGray);
+            ShowMessage($"Number of rows in header of the output Excel is not given. Used default: {_headerDepthOutput}", ConsoleColor.DarkGray);
 
         if(options.TryGetValue("closeAppAfterExecution", out var closeAppAfterExecution)) {
             if(bool.TryParse(closeAppAfterExecution, out bool parsedValue)) {
@@ -155,13 +165,13 @@ public class ConsoleUserInteraction : IUserInteraction
     }
 
 
-    public (AppMode appMode, string pathInputExcel, string sheetName, string columnPositions, string columnTexts,
-        string columnTextsOverlay, bool preliminarySortSheetByColumnPositions, string rowRange, string? cellIgnoringMark,
-        string pathOutputExcel, string sheetNameOutput, string columnTextsOutput, int headerDepth, bool closeAppAfterExecution)
+    public (AppMode appMode, string pathExcelInput, string sheetInput, string columnPositions, string columnTextsInput,
+        string columnTextsOverlay, bool preliminarySortSheetByColumnPositions, int headerDepthInput, string rowRangeInput, string? cellIgnoringMark,
+        string pathExcelOutput, string sheetOutput, string columnTextsOutput, int headerDepthOutput, bool closeAppAfterExecution)
         GetParameters() =>
-        (_appMode, _pathInputExcel, _sheetName, _columnPositions, _columnTexts,
-        _columnTextsOverlay, _preliminarySortSheetByColumnPositions, _rowRange, _cellIgnoringMark,
-        _pathOutputExcel, _sheetNameOutput, _columnTextsOutput, _headerDepth, _closeAppAfterExecution);
+        (_appMode, _pathExcelInput, _sheetInput, _columnPositions, _columnTextsInput,
+        _columnTextsOverlay, _preliminarySortSheetByColumnPositions, _headerDepthInput, _rowRangeInput, _cellIgnoringMark,
+        _pathExcelOutput, _sheetOutput, _columnTextsOutput, _headerDepthOutput, _closeAppAfterExecution);
 
 
     public void ShowMessage(string message, bool isLinebreakAdded = true)

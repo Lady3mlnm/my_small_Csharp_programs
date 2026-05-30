@@ -5,14 +5,14 @@ copy Data\Test_base.xlsx Data\Test_Output.xlsx
 
 start ExtractorExcelToExcel.exe ^
 	--appMode=combineTwoColumns ^
-	--pathInputExcel=Data\Test_Input.xlsx ^
-	--sheetName="Amino Acids" ^
+	--pathExcelInput=Data\Test_Input.xlsx ^
+	--sheetInput="Amino Acids" ^
 	--columnPositions=A ^
-	--columnTexts=B ^
+	--columnTextsInput=B ^
 	--columnTextsOverlay=H ^
-	--rowRange=2:4,6,10:15 ^
+	--rowRangeInput=2:4,6,10:15 ^
 	--cellIgnoringMark="" ^
-	--pathOutputExcel=Data\Test_Output.xlsx ^
-	--sheetNameOutput="TestStorage" ^
+	--pathExcelOutput=Data\Test_Output.xlsx ^
+	--sheetOutput="TestStorage" ^
 	--columnTextsOutput=B ^
-	--headerDepth=1
+	--headerDepthOutput=1

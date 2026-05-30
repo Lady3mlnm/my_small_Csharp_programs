@@ -5,9 +5,9 @@ namespace ExtractorExcelToExcel.DataAccess;
 
 public interface IRepository
 {
-    Record[] ReadRecordsFromRepository(string pathInputExcel, AppMode appMode, string sheetName,
-        string columnPositions, string columnTexts, string columnTextsOverlay,
-        bool preliminarySortSheetByColumnPositions, string rowRange, string? cellIgnoringMark);
+    Record[] ReadRecordsFromRepository(string pathExcelInput, AppMode appMode, string sheetInput,
+        string columnPositions, string columnTextsInput, string columnTextsOverlay,
+        bool preliminarySortSheetByColumnPositions, int headerDepthInput, string rowRangeInput, string? cellIgnoringMark);
 
     void WriteRecordsToRepository(IEnumerable<Record> records, string pathOutputExcel,
         string sheetNameOutput, string columnTextsOutput, int headerDepth);
