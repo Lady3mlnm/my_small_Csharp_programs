@@ -1,21 +1,25 @@
-﻿namespace ExtractorExcelToExcel.App;
+﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
+using System.ComponentModel;
+
+namespace ExtractorExcelToExcel.App;
 
 public class ConsoleUserInteraction : IUserInteraction
 {
     private AppMode _appMode = AppMode.extractOneColumn;    // AppMode.extractOneColumn / AppMode.combineTwoColumns
     private string _pathExcelInput = @"Data\Test_Input.xlsx";
     private string _sheetInput = "TestSheet";               // "Amino Acids", "TestSheet"
-    private string _columnPositions = "A";                  // "A", "auto", "autoNumbering", "default", "-"
+    private string _columnPositions = "auto";               // "A", "auto", "autoNumbering", "default", "-"
     private string _columnTextsInput = "C";
     private string _columnTextsOverlay = "H";
     private bool _preliminarySortSheetByColumnPositions = false;
     private int _headerDepthInput = 1;
     private string _rowRangeInput = "2:11";                 // "2:11", "3:5,10,14:16", ":", ":6"
-    private string? _cellIgnoringMark = "";                 // "doNotUseCellIgnoring"
+    private List<string> _cellIgnoringMarksAsList = new List<string>();   // [""],  for "doNotUseCellIgnoring" set new List<string>()
     private string _pathExcelOutput = @"Data\Test_Output.xlsx";
     private string _sheetOutput = "copyInputSheet";         // "Storage", "copyInputSheet"
     private string _columnTextsOutput = "copyInputColumn";  // "copyInputColumn"
     private int _headerDepthOutput = 1;
+    private OutputOrderMode _outputOrderMode = OutputOrderMode.outputOrderAccordingToPositions;  //outputOrderAccordingToPositions, outputOrderShiftToHeader, outputOrderCompressed
     private bool _closeAppAfterExecution = false;
 
     static Dictionary<string, string> ParseArguments(string[] args)
@@ -109,15 +113,33 @@ public class ConsoleUserInteraction : IUserInteraction
             ShowMessage("Range of input rows is not given. Used default: " + _rowRangeInput, ConsoleColor.DarkGray);
 
         if(options.TryGetValue("cellIgnoringMark", out var cellIgnoringMark)) {
-            if(_cellIgnoringMark == "doNotUseCellIgnoring") {
+            if(cellIgnoringMark == "doNotUseCellIgnoring") {
+                _cellIgnoringMarksAsList = [];
                 ShowMessage($"Parameter '{cellIgnoringMark}' => Option for ignoring of cells with certain contents will not be used", ConsoleColor.Green);
-                _cellIgnoringMark = null;
             } else {
-                _cellIgnoringMark = cellIgnoringMark;
-                ShowMessage($"The contents of a cell indicating that the cell has to be ignored: >{_cellIgnoringMark}<", ConsoleColor.Green);
+                _cellIgnoringMarksAsList.Add(cellIgnoringMark);
+                ShowMessage($"The contents of a cell indicating that the cell has to be ignored: >{cellIgnoringMark}<", ConsoleColor.Green);
+
+                for(int i = 2; i <= 100; i++) {
+                    if(options.TryGetValue($"cellIgnoringMark{i}", out var additionalIgnoringMark))
+                        if(additionalIgnoringMark == "doNotUseCellIgnoring")
+                            break;
+                        else {
+                            _cellIgnoringMarksAsList.Add(additionalIgnoringMark);
+                            ShowMessage($"    Additional cell contents for ignoring (#{i}): >{additionalIgnoringMark}<", ConsoleColor.Green);
+                        }
+                    else
+                        break;
+                }
             }
-        } else
-            ShowMessage($"The contents of a cell indicating that the cell has to be ignored is not given. Used default: >{_cellIgnoringMark}<", ConsoleColor.DarkGray);
+        } else {
+            string defaultMark = (_cellIgnoringMarksAsList.Count()) switch {
+                0 => "doNotUseCellIgnoring",
+                1 => ">" + _cellIgnoringMarksAsList[0] + "<",
+                _ => "[>" + string.Join("<, >", _cellIgnoringMarksAsList) + "<]"
+            };
+            ShowMessage($"The contents of a cell indicating that the cell has to be ignored is not given. Used default: " + defaultMark, ConsoleColor.DarkGray);
+        }
 
         if(options.TryGetValue("pathExcelOutput", out var pathExcelOutput)) {
             _pathExcelOutput = pathExcelOutput;
@@ -154,6 +176,16 @@ public class ConsoleUserInteraction : IUserInteraction
         } else
             ShowMessage($"Number of rows in header of the output Excel is not given. Used default: {_headerDepthOutput}", ConsoleColor.DarkGray);
 
+        if(options.TryGetValue("outputOrderMode", out var outputOrderMode)) {
+            if(Enum.TryParse<OutputOrderMode>(outputOrderMode, true, out OutputOrderMode parsedMode) && Enum.IsDefined(typeof(OutputOrderMode), parsedMode)) {
+                _outputOrderMode = parsedMode;
+                ShowMessage("Mode determing order of line output: " + _outputOrderMode, ConsoleColor.Green);
+            } else
+                throw new ArgumentException($"Invalid value for parameter 'outputOrderMode': {outputOrderMode}. " +
+                                            $"Use one of the following values: {string.Join(" / ", Enum.GetNames(typeof(OutputOrderMode)))}.");
+        } else
+            ShowMessage("Mode determing order of line output is not given. Used default: " + _outputOrderMode, ConsoleColor.DarkGray);
+
         if(options.TryGetValue("closeAppAfterExecution", out var closeAppAfterExecution)) {
             if(bool.TryParse(closeAppAfterExecution, out bool parsedValue)) {
                 _closeAppAfterExecution = parsedValue;
@@ -166,12 +198,12 @@ public class ConsoleUserInteraction : IUserInteraction
 
 
     public (AppMode appMode, string pathExcelInput, string sheetInput, string columnPositions, string columnTextsInput,
-        string columnTextsOverlay, bool preliminarySortSheetByColumnPositions, int headerDepthInput, string rowRangeInput, string? cellIgnoringMark,
-        string pathExcelOutput, string sheetOutput, string columnTextsOutput, int headerDepthOutput, bool closeAppAfterExecution)
+        string columnTextsOverlay, bool preliminarySortSheetByColumnPositions, int headerDepthInput, string rowRangeInput, string[] cellIgnoringMarks,
+        string pathExcelOutput, string sheetOutput, string columnTextsOutput, int headerDepthOutput, OutputOrderMode outputOrderMode, bool closeAppAfterExecution)
         GetParameters() =>
         (_appMode, _pathExcelInput, _sheetInput, _columnPositions, _columnTextsInput,
-        _columnTextsOverlay, _preliminarySortSheetByColumnPositions, _headerDepthInput, _rowRangeInput, _cellIgnoringMark,
-        _pathExcelOutput, _sheetOutput, _columnTextsOutput, _headerDepthOutput, _closeAppAfterExecution);
+        _columnTextsOverlay, _preliminarySortSheetByColumnPositions, _headerDepthInput, _rowRangeInput, _cellIgnoringMarksAsList.ToArray(),
+        _pathExcelOutput, _sheetOutput, _columnTextsOutput, _headerDepthOutput, _outputOrderMode, _closeAppAfterExecution);
 
 
     public void ShowMessage(string message, bool isLinebreakAdded = true)

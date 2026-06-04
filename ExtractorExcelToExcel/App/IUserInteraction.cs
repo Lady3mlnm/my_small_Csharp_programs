@@ -3,8 +3,8 @@
 public interface IUserInteraction
 {
     (AppMode appMode, string pathExcelInput, string sheetInput, string columnPositions, string columnTextsInput,
-        string columnTextsOverlay, bool preliminarySortSheetByColumnPositions, int headerDepthInput, string rowRangeInput, string? cellIgnoringMark,
-        string pathExcelOutput, string sheetOutput, string columnTextsOutput, int headerDepthOutput, bool closeAppAfterExecution)
+        string columnTextsOverlay, bool preliminarySortSheetByColumnPositions, int headerDepthInput, string rowRangeInput, string[] cellIgnoringMarks,
+        string pathExcelOutput, string sheetOutput, string columnTextsOutput, int headerDepthOutput, OutputOrderMode outputOrderMode, bool closeAppAfterExecution)
         GetParameters();
     void ShowMessage(string message, bool isLinebreakAdded = true);
     void ShowMessage(string message, ConsoleColor color, bool isLinebreakAdded = true);

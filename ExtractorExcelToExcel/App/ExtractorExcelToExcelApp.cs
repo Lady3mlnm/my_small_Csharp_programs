@@ -26,31 +26,32 @@ public class ExtractorExcelToExcelApp
         bool preliminarySortSheetByColumnPositions;
         int headerDepthInput;
         string rowRange;
-        string? cellIgnoringMark;
+        string[] cellIgnoringMarks;
         string pathExcelOutput;
         string sheetOutput;
         string columnTextsOutput;
         int headerDepthOutput;
+        OutputOrderMode outputOrderMode;
         bool closeAppAfterExecution;
 
         Stopwatch stopwatch = Stopwatch.StartNew();
 
         (appMode, pathExcelInput, sheetInput, columnPositions, columnTextsInput,
-         columnTextsOverlay, preliminarySortSheetByColumnPositions, headerDepthInput, rowRange, cellIgnoringMark,
-         pathExcelOutput, sheetOutput, columnTextsOutput, headerDepthOutput, closeAppAfterExecution) =
+         columnTextsOverlay, preliminarySortSheetByColumnPositions, headerDepthInput, rowRange, cellIgnoringMarks,
+         pathExcelOutput, sheetOutput, columnTextsOutput, headerDepthOutput, outputOrderMode, closeAppAfterExecution) =
              _userInteraction.GetParameters();
 
         Record[] records =
             _repository.ReadRecordsFromRepository(pathExcelInput, appMode, sheetInput,
                                                   columnPositions, columnTextsInput, columnTextsOverlay,
-                                                  preliminarySortSheetByColumnPositions, headerDepthInput, rowRange, cellIgnoringMark);
+                                                  preliminarySortSheetByColumnPositions, headerDepthInput, rowRange, cellIgnoringMarks);
 
         _userInteraction.ShowMessage("\nNumber of strings extracted from Excel: " + records.Length);
         _userInteraction.ShowMessage("First ten position-string pairs:");
         _userInteraction.ShowMessage(records[0..Math.Min(10, records.Length)].Select(record => record.ToString()),
                                      ConsoleColor.Cyan);
 
-        _repository.WriteRecordsToRepository(records, pathExcelOutput, sheetOutput, columnTextsOutput, headerDepthOutput);
+        _repository.WriteRecordsToRepository(records, pathExcelOutput, sheetOutput, columnTextsOutput, headerDepthOutput, outputOrderMode);
 
         _userInteraction.ShowMessage('\n' + "The app completed its work.");
 

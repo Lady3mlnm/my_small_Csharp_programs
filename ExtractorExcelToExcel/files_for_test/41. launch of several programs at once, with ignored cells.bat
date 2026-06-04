@@ -1,15 +1,14 @@
 :: This command tests launch of several copies of the app at once. All copies work with the same input and output files.
+:: This test is for check of work with ignored lines (parameter "cellIgnoringMark").
 
 copy Data\Test_base.xlsx Data\Test_Output.xlsx
 
 start /wait ExtractorExcelToExcel.exe ^
-	--appMode=combineTwoColumns ^
+	--appMode=extractOneColumn ^
 	--pathExcelInput=Data\Test_Input.xlsx ^
 	--sheetInput="Amino Acids" ^
 	--columnPositions=A ^
-	--columnTextsInput=B ^
-	--columnTextsOverlay=H ^
-	--preliminarySortSheetByColumnPositions=true ^
+	--columnTextsInput=H ^
 	--rowRangeInput=: ^
 	--cellIgnoringMark="" ^
 	--pathExcelOutput=Data\Test_Output.xlsx ^
@@ -19,13 +18,11 @@ start /wait ExtractorExcelToExcel.exe ^
 	--closeAppAfterExecution
 
 start /wait ExtractorExcelToExcel.exe ^
-	--appMode=combineTwoColumns ^
+	--appMode=extractOneColumn ^
 	--pathExcelInput=Data\Test_Input.xlsx ^
 	--sheetInput="Amino Acids" ^
 	--columnPositions=A ^
-	--columnTextsInput=B ^
-	--columnTextsOverlay=H ^
-	--preliminarySortSheetByColumnPositions=true ^
+	--columnTextsInput=H ^
 	--rowRangeInput=: ^
 	--cellIgnoringMark="" ^
 	--pathExcelOutput=Data\Test_Output.xlsx ^
@@ -35,13 +32,11 @@ start /wait ExtractorExcelToExcel.exe ^
 	--closeAppAfterExecution
 
 start /wait ExtractorExcelToExcel.exe ^
-	--appMode=combineTwoColumns ^
+	--appMode=extractOneColumn ^
 	--pathExcelInput=Data\Test_Input.xlsx ^
 	--sheetInput="Amino Acids" ^
 	--columnPositions=A ^
-	--columnTextsInput=B ^
-	--columnTextsOverlay=H ^
-	--preliminarySortSheetByColumnPositions=true ^
+	--columnTextsInput=H ^
 	--rowRangeInput=: ^
 	--cellIgnoringMark="" ^
 	--pathExcelOutput=Data\Test_Output.xlsx ^

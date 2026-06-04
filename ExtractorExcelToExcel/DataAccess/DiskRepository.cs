@@ -1,15 +1,16 @@
 ﻿using ExtractorExcelToExcel.App;
 using ExtractorExcelToExcel.DataStructures;
-namespace ExtractorExcelToExcel.DataAccess;
 using ClosedXML.Excel;
 using System.Text.RegularExpressions;
 
-internal class DiskRepository : IRepository
+namespace ExtractorExcelToExcel.DataAccess;
+
+public class DiskRepository : IRepository
 {
     public Record[] ReadRecordsFromRepository(
         string pathExcelInput, AppMode appMode, string sheetInput,
         string columnPositions, string columnTextsInput, string columnTextsOverlay,
-        bool preliminarySortSheetByColumnPositions, int headerDepthInput, string rowRangeInput, string? cellIgnoringMark)
+        bool preliminarySortSheetByColumnPositions, int headerDepthInput, string rowRangeInput, string[] cellIgnoringMarks)
     {
         if(!File.Exists(pathExcelInput))
             throw new FileNotFoundException($"File with name '{pathExcelInput}' ({Path.GetFullPath(pathExcelInput)}) does not exist");
@@ -26,8 +27,8 @@ internal class DiskRepository : IRepository
                 clarifyRowRange(ref rowRangeInput, worksheet, headerDepthInput);
 
                 IEnumerable<Record> recordsFlow = appMode switch {
-                    AppMode.extractOneColumn  => ReadExcelColumn(worksheet, columnPositions, columnTextsInput, rowRangeInput, cellIgnoringMark),
-                    AppMode.combineTwoColumns => ReadExcelTwoColumnsCombined(worksheet, columnPositions, columnTextsInput, columnTextsOverlay, rowRangeInput, cellIgnoringMark),
+                    AppMode.extractOneColumn  => ReadExcelColumn(worksheet, columnPositions, columnTextsInput, rowRangeInput, cellIgnoringMarks),
+                    AppMode.combineTwoColumns => ReadExcelTwoColumnsCombined(worksheet, columnPositions, columnTextsInput, columnTextsOverlay, rowRangeInput, cellIgnoringMarks),
                     _ => throw new ArgumentException("Reading from repository using unsupported mode: " + appMode),
                 };
 
@@ -62,7 +63,7 @@ internal class DiskRepository : IRepository
     }
 
 
-    private IEnumerable<Record> ReadExcelColumn(IXLWorksheet worksheet, string columnPositions, string columnTexts, string rowRange, string? cellIgnoringMark = "")
+    private IEnumerable<Record> ReadExcelColumn(IXLWorksheet worksheet, string columnPositions, string columnTexts, string rowRange, string[] cellIgnoringMarks)
     {
         string pattern = @"\d+";
         string searchTexts = Regex.Replace(rowRange, pattern, columnTexts + "$&");   //= Regex.Replace(rowRange, pattern, m => columnTexts + m.Value);
@@ -71,24 +72,39 @@ internal class DiskRepository : IRepository
                                .Select(cell => cell.Value.ToString());
 
         if(columnPositions == "auto") {
-            return ieTexts.Select((st, index) => new Record(index + 1, st))
-                          .Where(record => record.Text != cellIgnoringMark);
+            switch(cellIgnoringMarks.Length) {
+                case 0:
+                    return ieTexts.Select((st, index) => new Record(index + 1, st));
+                case 1:
+                    string cellIgnoringMark = cellIgnoringMarks[0];
+                    return ieTexts.Select((st, index) => new Record(index + 1, st))
+                                  .Where(record => record.Text != cellIgnoringMark);
+                default:
+                    return ieTexts.Select((st, index) => new Record(index + 1, st))
+                                  .Where(record => !cellIgnoringMarks.Contains(record.Text));
+            }
         } else {
             string searchPositions = Regex.Replace(rowRange, pattern, columnPositions + "$&");
 
             IEnumerable<int> iePos = worksheet.Cells(searchPositions)
                                               .Select(cell => int.Parse(cell.Value.ToString()));
 
-            //Console.WriteLine(iePos.Count());
-            
-
-            return ieTexts.Zip(iePos, (st, pos) => new Record(pos, st))
-                          .Where(record => record.Text != cellIgnoringMark);
+            switch(cellIgnoringMarks.Length) {
+                case 0:
+                    return ieTexts.Zip(iePos, (st, pos) => new Record(pos, st));
+                case 1:
+                    string cellIgnoringMark = cellIgnoringMarks[0];
+                    return ieTexts.Zip(iePos, (st, pos) => new Record(pos, st))
+                                  .Where(record => record.Text != cellIgnoringMark);
+                default:
+                    return ieTexts.Zip(iePos, (st, pos) => new Record(pos, st))
+                                  .Where(record => !cellIgnoringMarks.Contains(record.Text));
+            }
         }
     }
 
 
-    private IEnumerable<Record> ReadExcelTwoColumnsCombined(IXLWorksheet worksheet, string columnPositions, string columnTexts, string columnOverlaps, string rowRange, string? cellIgnoringMark)
+    private IEnumerable<Record> ReadExcelTwoColumnsCombined(IXLWorksheet worksheet, string columnPositions, string columnTexts, string columnOverlaps, string rowRange, string[] cellIgnoringMarks)
     {
         string pattern = @"\d+";
         string searchTexts = Regex.Replace(rowRange, pattern, columnTexts + "$&");   //= Regex.Replace(rowRange, pattern, m => columnTexts + m.Value);
@@ -101,22 +117,43 @@ internal class DiskRepository : IRepository
                                   .Select(cell => cell.Value.ToString());
 
         if(columnPositions == "auto") {
-            return ieTexts.Zip(ieOverlaps, (stOriginal, stOverlap) => (stOverlap == cellIgnoringMark) ? stOriginal : stOverlap)
-                          .Select((st, index) => new Record(index + 1, st))
-                          .Where(record => record.Text != cellIgnoringMark);
+            switch(cellIgnoringMarks.Length) {
+                case 0:
+                    return ieOverlaps.Select((st, index) => new Record(index + 1, st));  // algorithm similar to that in the 'ReadExcelColumn' function
+                case 1:
+                    string cellIgnoringMark = cellIgnoringMarks[0];
+                    return ieTexts.Zip(ieOverlaps, (stOriginal, stOverlap) => (stOverlap == cellIgnoringMark) ? stOriginal : stOverlap)
+                                  .Select((st, index) => new Record(index + 1, st))
+                                  .Where(record => record.Text != cellIgnoringMark);
+                default:
+                    return ieTexts.Zip(ieOverlaps, (stOriginal, stOverlap) => (cellIgnoringMarks.Contains(stOverlap)) ? stOriginal : stOverlap)
+                                  .Select((st, index) => new Record(index + 1, st))
+                                  .Where(record => !cellIgnoringMarks.Contains(record.Text));
+            }
         } else {
             string searchPositions = Regex.Replace(rowRange, pattern, columnPositions + "$&");
 
             IEnumerable<int> iePos = worksheet.Cells(searchPositions)
                                               .Select(cell => int.Parse(cell.Value.ToString()));
 
-            return ieTexts.Zip(ieOverlaps, (stOriginal, stOverlap) => (stOverlap == cellIgnoringMark) ? stOriginal : stOverlap)
-                          .Zip(iePos, (st, pos) => new Record(pos, st))
-                          .Where(record => record.Text != cellIgnoringMark);
+            switch(cellIgnoringMarks.Length) {
+                case 0:
+                    return ieOverlaps.Zip(iePos, (st, pos) => new Record(pos, st));  // algorithm similar to that in the 'ReadExcelColumn' function
+                case 1:
+                    string cellIgnoringMark = cellIgnoringMarks[0];
+                    return ieTexts.Zip(ieOverlaps, (stOriginal, stOverlap) => (stOverlap == cellIgnoringMark) ? stOriginal : stOverlap)
+                                  .Zip(iePos, (st, pos) => new Record(pos, st))
+                                  .Where(record => record.Text != cellIgnoringMark);
+                default:
+                    return ieTexts.Zip(ieOverlaps, (stOriginal, stOverlap) => (cellIgnoringMarks.Contains(stOverlap)) ? stOriginal : stOverlap)
+                                  .Zip(iePos, (st, pos) => new Record(pos, st))
+                                  .Where(record => !cellIgnoringMarks.Contains(record.Text));
+            }
         }
     }
 
-    public void WriteRecordsToRepository(IEnumerable<Record> records, string pathOutputExcel, string sheetNameOutput, string columnTextsOutput, int headerDepthOutput)
+
+    public void WriteRecordsToRepository(IEnumerable<Record> records, string pathOutputExcel, string sheetNameOutput, string columnTextsOutput, int headerDepthOutput, OutputOrderMode outputOrderMode)
     {
         if(!File.Exists(pathOutputExcel))
             throw new FileNotFoundException($"File with name '{pathOutputExcel}' ({Path.GetFullPath(pathOutputExcel)}) does not exist");
@@ -124,8 +161,24 @@ internal class DiskRepository : IRepository
         using(var fileStream = new FileStream(pathOutputExcel, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite)) {
             var workbook = new XLWorkbook(fileStream);
             if(workbook.TryGetWorksheet(sheetNameOutput, out IXLWorksheet worksheet)) {
-                foreach(var record in records)
-                    worksheet.Cell($"{columnTextsOutput}{record.Position + headerDepthOutput}").Value = record.Text;
+                switch (outputOrderMode) {
+                    case OutputOrderMode.outputOrderAccordingToPositions:
+                        foreach(var record in records)
+                            worksheet.Cell($"{columnTextsOutput}{record.Position + headerDepthOutput}").Value = record.Text;
+                        break;
+                    case OutputOrderMode.outputOrderShiftToHeader:
+                        int shift = records.First().Position - headerDepthOutput - 1;
+                        foreach(var record in records)
+                            worksheet.Cell($"{columnTextsOutput}{record.Position - shift}").Value = record.Text;
+                        break;
+                    case OutputOrderMode.outputOrderCompressed:
+                        int counter = headerDepthOutput;
+                        foreach(var record in records)
+                            worksheet.Cell($"{columnTextsOutput}{++counter}").Value = record.Text;
+                        break;
+                    default:
+                        throw new ArgumentException("Ouput of text lines using unsupported mode: " + outputOrderMode);
+                }
                 workbook.Save();
             } else {
                 throw new ArgumentException($"The file '{pathOutputExcel}' doesn't contain a worksheet with name '{sheetNameOutput}'");
