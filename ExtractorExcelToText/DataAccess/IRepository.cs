@@ -1,4 +1,4 @@
-﻿using ClosedXML.Excel;
+﻿using ExtractorExcelToText.App;
 using ExtractorExcelToText.DataStructures;
 using System.Text;
 
@@ -6,9 +6,9 @@ namespace ExtractorExcelToText.DataAccess;
 
 public interface IRepository
 {
-    FileStream GetFileStreamFromStorage(string pathInputExcel);
-    IOrderedEnumerable<Record> ReadExcelColumn(FileStream fileStream, string sheetName, string columnPositions, string columnTexts, string rowRange, string? cellIgnoringMark);
-    IOrderedEnumerable<Record> ReadExcelTwoColumnsCombined(FileStream fileStream, string sheetName, string columnPositions, string columnTexts, string columnOverlay, string rowRange, string? cellIgnoringMark);
-    string[] ReadTxt(string pathInputText, Encoding encoding);
-    void WriteArrayToRepository(string filePath, string[] stringsReady, bool addEmptyLineToEnd, Encoding encoding);
+    Record[] ReadRecordsFromRepository(string pathExcelInput, AppMode appMode, string sheetInput,
+        string columnPositions, string columnTextsInput, string columnTextsOverlay,
+        bool preliminarySortSheetByColumnPositions, int headerDepthInput, string rowRangeInput, string[] cellIgnoringMarks);
+    string[] ReadTxt(string pathTxtInput, Encoding encoding);
+    void WriteArrayToRepository(string pathTxtOutput, string[] stringsReady, bool addEmptyLineToEnd, Encoding encoding);
 }

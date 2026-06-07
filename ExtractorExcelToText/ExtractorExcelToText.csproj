@@ -5,6 +5,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AssemblyName>ExtractorExcelToText</AssemblyName>
+    <RootNamespace>ExtractorExcelToText</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

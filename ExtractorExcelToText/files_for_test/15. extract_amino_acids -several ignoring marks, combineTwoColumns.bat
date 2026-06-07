@@ -1,18 +1,18 @@
-:: A test of the most comprehensive, double data merge.
-:: This command overlays the contents of one Excel column on top of the other.
-:: The result is overlaid on top of the file content.
+:: This command extracts names of amino acids and places them according to positions specified in Excel file.
 
 copy Data\Test_base.txt Data\Test_Output.txt
 
 start ExtractorExcelToText.exe ^
 	--appMode=combineTwoColumns ^
 	--pathExcelInput=Data\Test_Input.xlsx ^
-	--sheetInput="Amino Acids" ^
-	--columnPositions=A ^
+	--sheetInput="MultiIgnoring" ^
+	--columnPositions=autoNumbering ^
 	--columnTextsInput=B ^
 	--columnTextsOverlay=H ^
-	--rowRangeInput=2:4,6,10:15 ^
+	--rowRangeInput=: ^
 	--cellIgnoringMark="" ^
+	--cellIgnoringMark2="." ^
+	--cellIgnoringMark3="_" ^
 	--writingMode=modeOverlay ^
 	--pathTxtOutput=Data\Test_Output.txt ^
 	--emptyLineAtEnd ^
