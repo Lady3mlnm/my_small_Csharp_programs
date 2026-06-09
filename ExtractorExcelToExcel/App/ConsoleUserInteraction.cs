@@ -1,7 +1,4 @@
-﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
-using System.ComponentModel;
-
-namespace ExtractorExcelToExcel.App;
+﻿namespace ExtractorExcelToExcel.App;
 
 public class ConsoleUserInteraction : IUserInteraction
 {
@@ -14,7 +11,7 @@ public class ConsoleUserInteraction : IUserInteraction
     private bool _preliminarySortSheetByColumnPositions = false;
     private int _headerDepthInput = 1;
     private string _rowRangeInput = "2:11";                 // "2:11", "3:5,10,14:16", ":", ":6"
-    private List<string> _cellIgnoringMarksAsList = new List<string>();   // [""],  for "doNotUseCellIgnoring" set new List<string>()
+    private List<string> _cellIgnoringMarksAsList = [""];   // [""],  for "doNotUseCellIgnoring" set new List<string>()
     private string _pathExcelOutput = @"Data\Test_Output.xlsx";
     private string _sheetOutput = "copyInputSheet";         // "Storage", "copyInputSheet"
     private string _columnTextsOutput = "copyInputColumn";  // "copyInputColumn"
@@ -35,6 +32,7 @@ public class ConsoleUserInteraction : IUserInteraction
 
         return dict;
     }
+
 
     public ConsoleUserInteraction(string[] args, string appTitle = "ExtractorExcelToText")
     {

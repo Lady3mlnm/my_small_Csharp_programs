@@ -1,4 +1,4 @@
-**ExtractorExcelToExtractor** is a console program for extraction texts from one Excel file to another Excel file.<br>
+**ExtractorExcelToExcel** is a console program for extraction texts from one Excel file to another Excel file.<br>
 My other related programs: [ExtractorExcelToText](../ExtractorExcelToText), [ExtractorTextToExcel](../ExtractorTextToExcel).
 
 To launch the application with parameters, it is convenient to use a bat-file. The folder <code>[files_for_test](./files_for_test)</code> contains ReadMe with explanation of parameters and examples of bat-files. Place contents of that folder in directory with built application and launch the bat-file so the application can demonstrate its work.
