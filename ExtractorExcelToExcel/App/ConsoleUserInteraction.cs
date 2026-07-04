@@ -115,7 +115,7 @@ public class ConsoleUserInteraction : IUserInteraction
                 _cellIgnoringMarksAsList = [];
                 ShowMessage($"Parameter '{cellIgnoringMark}' => Option for ignoring of cells with certain contents will not be used", ConsoleColor.Green);
             } else {
-                _cellIgnoringMarksAsList.Add(cellIgnoringMark);
+                _cellIgnoringMarksAsList = [cellIgnoringMark];
                 ShowMessage($"The contents of a cell indicating that the cell has to be ignored: >{cellIgnoringMark}<", ConsoleColor.Green);
 
                 for(int i = 2; i <= 100; i++) {

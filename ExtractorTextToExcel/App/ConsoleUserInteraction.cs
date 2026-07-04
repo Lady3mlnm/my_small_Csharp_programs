@@ -66,7 +66,7 @@ public class ConsoleUserInteraction : IUserInteraction
                 _stringIgnoringMarksAsList = [];
                 ShowMessage($"Parameter '{stringIgnoringMark}' => Option for ignoring of strings with certain contents will not be used", ConsoleColor.Green);
             } else {
-                _stringIgnoringMarksAsList.Add(stringIgnoringMark);
+                _stringIgnoringMarksAsList = [stringIgnoringMark];
                 ShowMessage($"The contents of a string indicating that the string has to be ignored: >{stringIgnoringMark}<", ConsoleColor.Green);
 
                 for(int i = 2; i <= 100; i++) {
