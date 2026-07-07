@@ -109,11 +109,11 @@ public class ConsoleUserInteraction : IUserInteraction
             ShowMessage($"Column in the output Excel for extracted texts is not given. Used default: {_columnTextsOutput}", ConsoleColor.DarkGray);
 
         if(options.TryGetValue("headerDepthOutput", out var headerDepthOutput)) {
-            if(int.TryParse(headerDepthOutput, out int headerDepthInt) && headerDepthInt >= 0) {
+            if(int.TryParse(headerDepthOutput, out int headerDepthInt)) {
                 _headerDepthOutput = headerDepthInt;
                 ShowMessage($"Number of rows in header of the output Excel: {_headerDepthOutput}", ConsoleColor.Green);
             } else
-                throw new ArgumentException($"Invalid value for parameter 'headerDepthOutput': {headerDepthOutput}. It should be a non-negative integer.");
+                throw new ArgumentException($"Invalid value for parameter 'headerDepthOutput': {headerDepthOutput}. It should be an integer.");
         } else
             ShowMessage($"Number of rows in header of the output Excel is not given. Used default: {_headerDepthOutput}", ConsoleColor.DarkGray);
 

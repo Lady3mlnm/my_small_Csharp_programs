@@ -98,11 +98,11 @@ public class ConsoleUserInteraction : IUserInteraction
             ShowMessage(@"Parameter whether to sort the sheet by columnPositions before taking rowRangeInput is not given. Used default: " + _preliminarySortSheetByColumnPositions, ConsoleColor.DarkGray);
 
         if(options.TryGetValue("headerDepthInput", out var headerDepthInput)) {
-            if(int.TryParse(headerDepthInput, out int headerDepthInt) && headerDepthInt >= 0) {
+            if(int.TryParse(headerDepthInput, out int headerDepthInt)) {
                 _headerDepthInput = headerDepthInt;
                 ShowMessage($"Number of rows in header of the input Excel: {_headerDepthInput}", ConsoleColor.Green);
             } else
-                throw new ArgumentException($"Invalid value for parameter 'headerDepthInput': {headerDepthInput}. It should be a non-negative integer.");
+                throw new ArgumentException($"Invalid value for parameter 'headerDepthInput': {headerDepthInput}. It should be an integer.");
         } else
             ShowMessage($"Number of rows in header of the input Excel is not given. Used default: {_headerDepthInput}", ConsoleColor.DarkGray);
 
