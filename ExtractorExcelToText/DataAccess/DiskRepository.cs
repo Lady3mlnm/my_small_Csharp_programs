@@ -164,14 +164,6 @@ public class DiskRepository : IRepository
     }
 
 
-    public void WriteRecordsToRepository(Record[] records, string pathTxtOutput, bool emptyLineAtEnd, Encoding encoding)
-    {
-
-    }
-
-
-
-
     public void WriteArrayToRepository(string pathTxtOutput, string[] stringsReady, bool emptyLineAtEnd, Encoding encoding)
     {
         if(emptyLineAtEnd)

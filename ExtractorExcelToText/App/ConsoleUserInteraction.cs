@@ -17,6 +17,8 @@ public class ConsoleUserInteraction : IUserInteraction
     private List<string> _cellIgnoringMarksAsList = [""];  // [""],  for "doNotUseCellIgnoring" set new List<string>()
     private WritingMode _writingMode = WritingMode.modeCreateNew;  // WritingMode.modeCreateNew / WritingMode.modeOverlay;
     private string _pathTxtOutput = @"Data\Test_Output.txt";
+    private int _headerDepthOutput = 0;
+    private OutputOrderMode _outputOrderMode = OutputOrderMode.outputOrderAccordingToPositions;  //outputOrderAccordingToPositions, outputOrderShiftToHeader, outputOrderCompressed
     private bool _emptyLineAtEnd = true;
     private Encoding _encoding = Encoding.Default;
     private bool _closeAppAfterExecution = false;
@@ -98,11 +100,11 @@ public class ConsoleUserInteraction : IUserInteraction
             ShowMessage(@"Parameter whether to sort the sheet by columnPositions before taking rowRangeInput is not given. Used default: " + _preliminarySortSheetByColumnPositions, ConsoleColor.DarkGray);
 
         if(options.TryGetValue("headerDepthInput", out var headerDepthInput)) {
-            if(int.TryParse(headerDepthInput, out int headerDepthInt)) {
+            if(int.TryParse(headerDepthInput, out int headerDepthInt) && headerDepthInt >= 0) {
                 _headerDepthInput = headerDepthInt;
                 ShowMessage($"Number of rows in header of the input Excel: {_headerDepthInput}", ConsoleColor.Green);
             } else
-                throw new ArgumentException($"Invalid value for parameter 'headerDepthInput': {headerDepthInput}. It should be an integer.");
+                throw new ArgumentException($"Invalid value for parameter 'headerDepthInput': {headerDepthInput}. It should be a non-negative integer.");
         } else
             ShowMessage($"Number of rows in header of the input Excel is not given. Used default: {_headerDepthInput}", ConsoleColor.DarkGray);
 
@@ -158,6 +160,25 @@ public class ConsoleUserInteraction : IUserInteraction
         } else
             ShowMessage($"Name of text file {refinementOfPhrase} is not given. Used default: " + _pathTxtOutput, ConsoleColor.DarkGray);
 
+        if(options.TryGetValue("headerDepthOutput", out var headerDepthOutput)) {
+            if(int.TryParse(headerDepthOutput, out int headerDepthInt)) {
+                _headerDepthOutput = headerDepthInt;
+                ShowMessage($"Number of rows in header of the output text file: {_headerDepthOutput}", ConsoleColor.Green);
+            } else
+                throw new ArgumentException($"Invalid value for parameter 'headerDepthOutput': {headerDepthOutput}. It should be an integer.");
+        } else
+            ShowMessage($"Number of rows in header of the output text file is not given. Used default: {_headerDepthOutput}", ConsoleColor.DarkGray);
+
+        if(options.TryGetValue("outputOrderMode", out var outputOrderMode)) {
+            if(Enum.TryParse<OutputOrderMode>(outputOrderMode, true, out OutputOrderMode parsedMode) && Enum.IsDefined(typeof(OutputOrderMode), parsedMode)) {
+                _outputOrderMode = parsedMode;
+                ShowMessage("Mode determing order of line output: " + _outputOrderMode, ConsoleColor.Green);
+            } else
+                throw new ArgumentException($"Invalid value for parameter 'outputOrderMode': {outputOrderMode}. " +
+                                            $"Use one of the following values: {string.Join(" / ", Enum.GetNames(typeof(OutputOrderMode)))}.");
+        } else
+            ShowMessage("Mode determing order of line output is not given. Used default: " + _outputOrderMode, ConsoleColor.DarkGray);
+
         if(options.TryGetValue("emptyLineAtEnd", out var emptyLineAtEnd)) {
             if(bool.TryParse(emptyLineAtEnd, out bool parsedValue)) {
                 _emptyLineAtEnd = parsedValue;
@@ -194,11 +215,11 @@ public class ConsoleUserInteraction : IUserInteraction
 
     public (AppMode appMode, string pathExcelInput, string sheetInput, string columnPositions, string columnTextsInput, string columnTextsOverlay,
         bool preliminarySortSheetByColumnPositions, int headerDepthInput, string rowRangeInput, string[] cellIgnoringMarks,
-        WritingMode writingMode, string pathTxtOutput, bool emptyLineAtEnd, Encoding encoding, bool closeAppAfterExecution)
+        WritingMode writingMode, string pathTxtOutput, int headerDepthOutput, OutputOrderMode outputOrderMode, bool emptyLineAtEnd, Encoding encoding, bool closeAppAfterExecution)
         GetParameters() =>
         (_appMode, _pathExcelInput, _sheetInput, _columnPositions, _columnTextsInput, _columnTextsOverlay,
         _preliminarySortSheetByColumnPositions, _headerDepthInput, _rowRangeInput, _cellIgnoringMarksAsList.ToArray(),
-        _writingMode, _pathTxtOutput, _emptyLineAtEnd, _encoding, _closeAppAfterExecution);
+        _writingMode, _pathTxtOutput, _headerDepthOutput, _outputOrderMode, _emptyLineAtEnd, _encoding, _closeAppAfterExecution);
 
 
     public void ShowMessage(string message, bool isLinebreakAdded = true)

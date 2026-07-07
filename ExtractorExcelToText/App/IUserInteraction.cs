@@ -7,7 +7,7 @@ public interface IUserInteraction
 {
     (AppMode appMode, string pathExcelInput, string sheetInput, string columnPositions, string columnTextsInput, string columnTextsOverlay,
         bool preliminarySortSheetByColumnPositions, int headerDepthInput, string rowRangeInput, string[] cellIgnoringMarks,
-        WritingMode writingMode, string pathTxtOutput, bool emptyLineAtEnd, Encoding encoding, bool closeAppAfterExecution)
+        WritingMode writingMode, string pathTxtOutput, int headerDepthOutput, OutputOrderMode outputOrderMode, bool emptyLineAtEnd, Encoding encoding, bool closeAppAfterExecution)
         GetParameters();
     void ShowMessage(string message, bool isLinebreakAdded = true);
     void ShowMessage(string message, ConsoleColor color, bool isLinebreakAdded = true);

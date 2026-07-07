@@ -27,4 +27,23 @@ public class ConversionLogic
 
         return strings;
     }
+
+    internal Record[] ShiftPositionsInRecords(Record[] recordsOrdered, int headerDepth, OutputOrderMode orderMode)
+    {
+        switch(orderMode) {
+            case OutputOrderMode.outputOrderAccordingToPositions:
+                return recordsOrdered.Select(record => new Record(record.Position + headerDepth, record.Text))
+                                     .ToArray();
+            case OutputOrderMode.outputOrderShiftToHeader:
+                int shift = recordsOrdered.First().Position - headerDepth - 1;
+                return recordsOrdered.Select(record => new Record(record.Position - shift, record.Text))
+                                     .ToArray();
+            case OutputOrderMode.outputOrderCompressed:
+                int startingPoint = headerDepth + 1;
+                return recordsOrdered.Select((record, index) => new Record(startingPoint + index, record.Text))
+                                     .ToArray();
+            default:
+                throw new ArgumentException("Ouput of text lines using unsupported mode: " + orderMode);
+        }
+    }
 }

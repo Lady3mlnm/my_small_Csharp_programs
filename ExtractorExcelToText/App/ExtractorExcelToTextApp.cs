@@ -32,6 +32,8 @@ public class ExtractorExcelToTextApp
         string[] cellIgnoringMarks;
         WritingMode writingMode;
         string pathTxtOutput;
+        int headerDepthOutput;
+        OutputOrderMode outputOrderMode;
         bool emptyLineAtEnd;
         Encoding encoding;
         bool closeAppAfterExecution;
@@ -40,32 +42,42 @@ public class ExtractorExcelToTextApp
 
         (appMode, pathExcelInput, sheetInput, columnPositions, columnTextsInput, columnTextsOverlay,
          preliminarySortSheetByColumnPositions, headerDepthInput, rowRange, cellIgnoringMarks,
-         writingMode, pathTxtOutput, emptyLineAtEnd, encoding, closeAppAfterExecution) =
+         writingMode, pathTxtOutput, headerDepthOutput, outputOrderMode, emptyLineAtEnd, encoding, closeAppAfterExecution) =
             _userInteraction.GetParameters();
 
-        Record[] recordsFromExcel =
+        Record[] recordsOrdered =
             _repository.ReadRecordsFromRepository(pathExcelInput, appMode, sheetInput,
                                                   columnPositions, columnTextsInput, columnTextsOverlay,
                                                   preliminarySortSheetByColumnPositions, headerDepthInput, rowRange, cellIgnoringMarks);
 
-        _userInteraction.ShowMessage("\nNumber of strings extracted from Excel: " + recordsFromExcel.Length);
+        _userInteraction.ShowMessage("\nNumber of strings extracted from Excel: " + recordsOrdered.Length);
         _userInteraction.ShowMessage("First five position-string pairs:");
-        _userInteraction.ShowMessage(recordsFromExcel[0..Math.Min(5, recordsFromExcel.Length)].Select(record => record.ToString()),
+        _userInteraction.ShowMessage(recordsOrdered[0..Math.Min(5, recordsOrdered.Length)].Select(record => record.ToString()),
                                      ConsoleColor.Cyan);
+
+        if (headerDepthOutput != 0 || outputOrderMode != OutputOrderMode.outputOrderAccordingToPositions) {
+            _userInteraction.ShowMessage('\n' +
+                "Shift of positions of the extracted strings according to received parameters 'headerDepthOutput' and 'outputOrderMode':");
+
+            recordsOrdered = _conversionLogic.ShiftPositionsInRecords(recordsOrdered, headerDepthOutput, outputOrderMode);
+
+            _userInteraction.ShowMessage(recordsOrdered[0..Math.Min(5, recordsOrdered.Length)].Select(record => record.ToString()),
+                                         ConsoleColor.Cyan);
+        }
 
         string[] stringsReady;
         if(writingMode == WritingMode.modeCreateNew) {
-            _userInteraction.ShowMessage($"\nMode {writingMode} chosen: create for extracted phrases a new file");
-            stringsReady = _conversionLogic.RecordsArrayToStringsArray(recordsFromExcel);
+            _userInteraction.ShowMessage($"\nMode {writingMode} chosen: create for extracted strings a new file");
+            stringsReady = _conversionLogic.RecordsArrayToStringsArray(recordsOrdered);
         } else if(writingMode == WritingMode.modeOverlay) {
-            _userInteraction.ShowMessage($"\nMode {writingMode} chosen: overlay extracted phrases above contents of the given file");
+            _userInteraction.ShowMessage($"\nMode {writingMode} chosen: overlay extracted strings above contents of the given file");
 
             string[] stringsFromTxt = _repository.ReadTxt(pathTxtOutput, encoding);
 
             _userInteraction.ShowMessage($"\nFirst five original strings in the given file:");
             _userInteraction.ShowMessage(stringsFromTxt[0..Math.Min(5, stringsFromTxt.Length)], ConsoleColor.Cyan);
 
-            stringsReady = _conversionLogic.OverlayRecordsToStrings(stringsFromTxt, recordsFromExcel);
+            stringsReady = _conversionLogic.OverlayRecordsToStrings(stringsFromTxt, recordsOrdered);
         } else
             throw new ArgumentException("Unsupported mode for output of results: " + writingMode);
 
@@ -73,6 +85,7 @@ public class ExtractorExcelToTextApp
         _userInteraction.ShowMessage($"\nFirst five strings:");
         _userInteraction.ShowMessage(stringsReady[0..Math.Min(5, stringsReady.Length)], ConsoleColor.Cyan);
 
+        //_userInteraction.ShowMessage('\n' + "Output is temporary disabled", ConsoleColor.Magenta);
         _repository.WriteArrayToRepository(pathTxtOutput, stringsReady, emptyLineAtEnd, encoding);
 
         _userInteraction.ShowMessage('\n' + "The app completed its work.");
