@@ -6,7 +6,7 @@ namespace ExtractorExcelToText.DataAccess;
 
 public interface IRepository
 {
-    Record[] ReadRecordsFromRepository(string pathExcelInput, AppMode appMode, string sheetInput,
+    (Record[], int nmbLinesIgnoredAtStart) ReadRecordsFromRepository(string pathExcelInput, AppMode appMode, string sheetInput,
         string columnPositions, string columnTextsInput, string columnTextsOverlay,
         bool preliminarySortSheetByColumnPositions, int headerDepthInput, string rowRangeInput, string[] cellIgnoringMarks);
     string[] ReadTxt(string pathTxtInput, Encoding encoding);

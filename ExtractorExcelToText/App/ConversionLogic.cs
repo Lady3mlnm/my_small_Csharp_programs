@@ -28,18 +28,23 @@ public class ConversionLogic
         return strings;
     }
 
-    internal Record[] ShiftPositionsInRecords(Record[] recordsOrdered, int headerDepth, OutputOrderMode orderMode)
+    public Record[] ShiftPositionsInRecords(
+        Record[] recordsOrdered, int headerDepth, OutputOrderMode orderMode, bool useAdditionalIndent, int AdditionalIndentWhenShifting)
     {
         switch(orderMode) {
             case OutputOrderMode.outputOrderAccordingToPositions:
                 return recordsOrdered.Select(record => new Record(record.Position + headerDepth, record.Text))
                                      .ToArray();
             case OutputOrderMode.outputOrderShiftToHeader:
-                int shift = recordsOrdered.First().Position - headerDepth - 1;
+                int shift = (useAdditionalIndent)
+                    ? recordsOrdered.First().Position - headerDepth - AdditionalIndentWhenShifting - 1
+                    : recordsOrdered.First().Position - headerDepth - 1;
                 return recordsOrdered.Select(record => new Record(record.Position - shift, record.Text))
                                      .ToArray();
             case OutputOrderMode.outputOrderCompressed:
-                int startingPoint = headerDepth + 1;
+                int startingPoint = (useAdditionalIndent)
+                    ? headerDepth + AdditionalIndentWhenShifting + 1
+                    : headerDepth + 1;
                 return recordsOrdered.Select((record, index) => new Record(startingPoint + index, record.Text))
                                      .ToArray();
             default:

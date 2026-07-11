@@ -19,6 +19,7 @@ public class ConsoleUserInteraction : IUserInteraction
     private string _pathTxtOutput = @"Data\Test_Output.txt";
     private int _headerDepthOutput = 0;
     private OutputOrderMode _outputOrderMode = OutputOrderMode.outputOrderAccordingToPositions;  //outputOrderAccordingToPositions, outputOrderShiftToHeader, outputOrderCompressed
+    private bool _considerStartingIgnoredCellsAsPositionsShift = true;
     private bool _emptyLineAtEnd = true;
     private Encoding _encoding = Encoding.Default;
     private bool _closeAppAfterExecution = false;
@@ -179,6 +180,17 @@ public class ConsoleUserInteraction : IUserInteraction
         } else
             ShowMessage("Mode determing order of line output is not given. Used default: " + _outputOrderMode, ConsoleColor.DarkGray);
 
+        if(_outputOrderMode == OutputOrderMode.outputOrderShiftToHeader || _outputOrderMode == OutputOrderMode.outputOrderCompressed) {
+            if(options.TryGetValue("considerStartingIgnoredCellsAsPositionsShift", out var considerStartingIgnoredCellsAsPositionsShift)) {
+                if(bool.TryParse(considerStartingIgnoredCellsAsPositionsShift, out bool parsedValue)) {
+                    _considerStartingIgnoredCellsAsPositionsShift = parsedValue;
+                    ShowMessage(@"Consider starting ignored cells as positions shift: " + _considerStartingIgnoredCellsAsPositionsShift, ConsoleColor.Green);
+                } else
+                    throw new ArgumentException($"Invalid value for parameter 'considerStartingIgnoredCellsAsPositionsShift': {considerStartingIgnoredCellsAsPositionsShift}. It should be a boolean.");
+            } else
+                ShowMessage(@"Parameter whether to consider starting ignored cells as positions shift is not given. Used default: " + _considerStartingIgnoredCellsAsPositionsShift, ConsoleColor.DarkGray);
+        }
+
         if(options.TryGetValue("emptyLineAtEnd", out var emptyLineAtEnd)) {
             if(bool.TryParse(emptyLineAtEnd, out bool parsedValue)) {
                 _emptyLineAtEnd = parsedValue;
@@ -215,11 +227,12 @@ public class ConsoleUserInteraction : IUserInteraction
 
     public (AppMode appMode, string pathExcelInput, string sheetInput, string columnPositions, string columnTextsInput, string columnTextsOverlay,
         bool preliminarySortSheetByColumnPositions, int headerDepthInput, string rowRangeInput, string[] cellIgnoringMarks,
-        WritingMode writingMode, string pathTxtOutput, int headerDepthOutput, OutputOrderMode outputOrderMode, bool emptyLineAtEnd, Encoding encoding, bool closeAppAfterExecution)
+        WritingMode writingMode, string pathTxtOutput, int headerDepthOutput, OutputOrderMode outputOrderMode,
+        bool considerStartingIgnoredCellsAsPositionsShift, bool emptyLineAtEnd, Encoding encoding, bool closeAppAfterExecution)
         GetParameters() =>
         (_appMode, _pathExcelInput, _sheetInput, _columnPositions, _columnTextsInput, _columnTextsOverlay,
         _preliminarySortSheetByColumnPositions, _headerDepthInput, _rowRangeInput, _cellIgnoringMarksAsList.ToArray(),
-        _writingMode, _pathTxtOutput, _headerDepthOutput, _outputOrderMode, _emptyLineAtEnd, _encoding, _closeAppAfterExecution);
+        _writingMode, _pathTxtOutput, _headerDepthOutput, _outputOrderMode, _considerStartingIgnoredCellsAsPositionsShift, _emptyLineAtEnd, _encoding, _closeAppAfterExecution);
 
 
     public void ShowMessage(string message, bool isLinebreakAdded = true)

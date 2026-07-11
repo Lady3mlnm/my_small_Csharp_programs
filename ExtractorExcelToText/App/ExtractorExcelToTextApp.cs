@@ -34,6 +34,7 @@ public class ExtractorExcelToTextApp
         string pathTxtOutput;
         int headerDepthOutput;
         OutputOrderMode outputOrderMode;
+        bool considerStartingIgnoredCellsAsPositionsShift;
         bool emptyLineAtEnd;
         Encoding encoding;
         bool closeAppAfterExecution;
@@ -42,24 +43,28 @@ public class ExtractorExcelToTextApp
 
         (appMode, pathExcelInput, sheetInput, columnPositions, columnTextsInput, columnTextsOverlay,
          preliminarySortSheetByColumnPositions, headerDepthInput, rowRange, cellIgnoringMarks,
-         writingMode, pathTxtOutput, headerDepthOutput, outputOrderMode, emptyLineAtEnd, encoding, closeAppAfterExecution) =
+         writingMode, pathTxtOutput, headerDepthOutput, outputOrderMode,
+         considerStartingIgnoredCellsAsPositionsShift, emptyLineAtEnd, encoding, closeAppAfterExecution) =
             _userInteraction.GetParameters();
 
-        Record[] recordsOrdered =
+        (Record[] recordsOrdered, int nmbStartingIgnoredCells) =
             _repository.ReadRecordsFromRepository(pathExcelInput, appMode, sheetInput,
                                                   columnPositions, columnTextsInput, columnTextsOverlay,
                                                   preliminarySortSheetByColumnPositions, headerDepthInput, rowRange, cellIgnoringMarks);
 
         _userInteraction.ShowMessage("\nNumber of strings extracted from Excel: " + recordsOrdered.Length);
+        if(nmbStartingIgnoredCells != 0 && outputOrderMode != OutputOrderMode.outputOrderAccordingToPositions)
+            _userInteraction.ShowMessage("Number of lines ignored at start of extraction: " + nmbStartingIgnoredCells);
         _userInteraction.ShowMessage("First five position-string pairs:");
         _userInteraction.ShowMessage(recordsOrdered[0..Math.Min(5, recordsOrdered.Length)].Select(record => record.ToString()),
                                      ConsoleColor.Cyan);
 
-        if (headerDepthOutput != 0 || outputOrderMode != OutputOrderMode.outputOrderAccordingToPositions) {
+        if(headerDepthOutput != 0 || outputOrderMode != OutputOrderMode.outputOrderAccordingToPositions) {
             _userInteraction.ShowMessage('\n' +
                 "Shift of positions of the extracted strings according to received parameters 'headerDepthOutput' and 'outputOrderMode':");
 
-            recordsOrdered = _conversionLogic.ShiftPositionsInRecords(recordsOrdered, headerDepthOutput, outputOrderMode);
+            recordsOrdered = _conversionLogic.ShiftPositionsInRecords(
+                recordsOrdered, headerDepthOutput, outputOrderMode, considerStartingIgnoredCellsAsPositionsShift, nmbStartingIgnoredCells);
 
             _userInteraction.ShowMessage(recordsOrdered[0..Math.Min(5, recordsOrdered.Length)].Select(record => record.ToString()),
                                          ConsoleColor.Cyan);
