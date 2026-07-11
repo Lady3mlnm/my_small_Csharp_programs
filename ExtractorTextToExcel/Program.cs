@@ -6,7 +6,7 @@ internal class Program
     private static void Main(string[] args)
     {
         try {
-            const string APPTITLE = "ExtractorTextToExcel v1.1.1";
+            const string APPTITLE = "ExtractorTextToExcel v1.1.2";
             IRepository repository = new DiskRepository();
             IUserInteraction userInteraction = new ConsoleUserInteraction(args, APPTITLE);
             var extractorExcelToExcelApp = new ExtractorTextToExcelApp(repository, userInteraction);

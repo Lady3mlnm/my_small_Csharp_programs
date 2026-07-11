@@ -14,14 +14,12 @@ internal class DiskRepository : IRepository
         if(stringRange == ":")
             return File.ReadAllLines(pathTxtInput, encoding);
         if(Regex.Match(stringRange, @"^:\d+$").Success) {
-            Console.WriteLine("case :n");
             int endLine = int.Parse(stringRange[1..]);
             return File.ReadLines(pathTxtInput, encoding)
                        .Take(endLine)
                        .ToArray();
         }
         if(Regex.Match(stringRange, @"^\d+:$").Success) {
-            Console.WriteLine("case n:");
             int startLine = int.Parse(stringRange[..^1]);
             return File.ReadLines(pathTxtInput, encoding)
                        .Skip(startLine-1)
