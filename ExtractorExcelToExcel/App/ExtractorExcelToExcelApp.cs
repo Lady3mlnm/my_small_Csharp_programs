@@ -32,26 +32,31 @@ public class ExtractorExcelToExcelApp
         string columnTextsOutput;
         int headerDepthOutput;
         OutputOrderMode outputOrderMode;
+        bool considerStartingIgnoredCellsAsPositionsShift;
         bool closeAppAfterExecution;
 
         Stopwatch stopwatch = Stopwatch.StartNew();
 
         (appMode, pathExcelInput, sheetInput, columnPositions, columnTextsInput,
-         columnTextsOverlay, preliminarySortSheetByColumnPositions, headerDepthInput, rowRange, cellIgnoringMarks,
-         pathExcelOutput, sheetOutput, columnTextsOutput, headerDepthOutput, outputOrderMode, closeAppAfterExecution) =
+         columnTextsOverlay, preliminarySortSheetByColumnPositions, headerDepthInput, rowRange,
+         cellIgnoringMarks,pathExcelOutput, sheetOutput, columnTextsOutput, headerDepthOutput,
+         outputOrderMode, considerStartingIgnoredCellsAsPositionsShift, closeAppAfterExecution) =
              _userInteraction.GetParameters();
 
-        Record[] records =
+        (Record[] recordsOrdered, int nmbStartingIgnoredCells) =
             _repository.ReadRecordsFromRepository(pathExcelInput, appMode, sheetInput,
                                                   columnPositions, columnTextsInput, columnTextsOverlay,
                                                   preliminarySortSheetByColumnPositions, headerDepthInput, rowRange, cellIgnoringMarks);
 
-        _userInteraction.ShowMessage("\nNumber of strings extracted from Excel: " + records.Length);
+        _userInteraction.ShowMessage("\nNumber of strings extracted from Excel: " + recordsOrdered.Length);
+        if(nmbStartingIgnoredCells != 0 && outputOrderMode != OutputOrderMode.outputOrderAccordingToPositions)
+            _userInteraction.ShowMessage("Number of lines ignored at start of extraction: " + nmbStartingIgnoredCells);
         _userInteraction.ShowMessage("First ten position-string pairs:");
-        _userInteraction.ShowMessage(records[0..Math.Min(10, records.Length)].Select(record => record.ToString()),
+        _userInteraction.ShowMessage(recordsOrdered[0..Math.Min(10, recordsOrdered.Length)].Select(record => record.ToString()),
                                      ConsoleColor.Cyan);
 
-        _repository.WriteRecordsToRepository(records, pathExcelOutput, sheetOutput, columnTextsOutput, headerDepthOutput, outputOrderMode);
+        _repository.WriteRecordsToRepository(recordsOrdered, pathExcelOutput, sheetOutput, columnTextsOutput,
+                                             headerDepthOutput, outputOrderMode, considerStartingIgnoredCellsAsPositionsShift, nmbStartingIgnoredCells);
 
         _userInteraction.ShowMessage('\n' + "The app completed its work.");
 
