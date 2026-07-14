@@ -13,6 +13,8 @@ Some options that can be transmit to the program via parameters:
 
 These options allow to implement a wide range of ways of text extractions required for complex projects.
 
+WARNING: If the Excel file contains formulas in the selected columns then the program throws an error with termination of the work or transmits further instead of the formula a string "#VALUE!" To prevent this, I recommend to check preliminary the selected columns for formulas, for example, with the program [SearchFormulasInExcel](../SearchFormulasInExcel).
+
 ![screenshot of the application](./screenshots/screenshot_of_ExtractorExcelToExcel_1.png)
 
 ![screenshot of the application](./screenshots/screenshot_of_ExtractorExcelToExcel_2.png)

@@ -12,6 +12,10 @@ Options that can be transmit to the program via parameters:
 - mode: create a new file for the result or to overlay the result on the contents of an existing text file in accordance with the lines positions;
 - encoding of the created text file.
 
+These options allow to implement a wide range of ways of text extractions required for complex projects.
+
+WARNING: If the Excel file contains formulas in the selected columns then the program throws an error with termination of the work or transmits further instead of the formula a string "#VALUE!" To prevent this, I recommend to check preliminary the selected columns for formulas, for example, with the program [SearchFormulasInExcel](../SearchFormulasInExcel).
+
 ![screenshot of the application](./screenshots/screenshot_of_ExtractorExcelToText_1.png)
 
 ![screenshot of the application](./screenshots/screenshot_of_ExtractorExcelToText_2.png)
