@@ -3,4 +3,5 @@ start SearchFormulasInExcel.exe ^
 	--sheet="TestSheet" ^
 	--headerDepth=1 ^
 	--columns=A,B ^
+	--searchedEntity=formula ^
 	--closeAppIfFormulasNotFound=false

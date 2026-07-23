@@ -6,6 +6,7 @@ public class ConsoleUserInteraction : IUserInteraction
     private string _sheet = "TestSheet";
     private int _headerDepth = 0;
     private string[] _columns = ["A", "B", "C"];
+    private SearchedEntity _searchedEntity = SearchedEntity.bothFormulaAndText;   // formula;  textStartingWithEqual;  bothFormulaAndText;
     private bool _closeAppIfFormulasNotFound = false;
 
     static Dictionary<string, string> ParseArguments(string[] args)
@@ -58,6 +59,16 @@ public class ConsoleUserInteraction : IUserInteraction
         } else
             ShowMessage("Columns on the sheet of the Excel file are not given. Used default: " + string.Join(",", _columns), ConsoleColor.DarkGray);
 
+        if(options.TryGetValue("searchedEntity", out var searchedEntity)) {
+            if(Enum.TryParse<SearchedEntity>(searchedEntity, true, out SearchedEntity parsedMode) && Enum.IsDefined(typeof(SearchedEntity), parsedMode)) {
+                _searchedEntity = parsedMode;
+                ShowMessage("Searched entity (mode): " + _searchedEntity, ConsoleColor.Green);
+            } else
+                throw new ArgumentException($"Invalid value for parameter 'searchedEntity': {searchedEntity}. " +
+                                            $"Use one of the following values: {string.Join(" / ", Enum.GetNames(typeof(SearchedEntity)))}.");
+        } else
+            ShowMessage("Searched entity (mode) is not given. Used default: " + _searchedEntity, ConsoleColor.DarkGray);
+
         if(options.TryGetValue("closeAppIfFormulasNotFound", out var closeAppIfFormulasNotFound)) {
             if(bool.TryParse(closeAppIfFormulasNotFound, out bool parsedValue)) {
                 _closeAppIfFormulasNotFound = parsedValue;
@@ -69,9 +80,15 @@ public class ConsoleUserInteraction : IUserInteraction
     }
 
 
-    public (string pathExcel, string sheet, int headerDepth, string[] columns, bool closeAppIfFormulasNotFound)
+    public (string pathExcel, string sheet, int headerDepth, string[] columns, SearchedEntity searchedEntity, bool closeAppIfFormulasNotFound)
         GetParameters() =>
-        (_pathExcel, _sheet, _headerDepth, _columns, _closeAppIfFormulasNotFound);
+        (_pathExcel, _sheet, _headerDepth, _columns, _searchedEntity, _closeAppIfFormulasNotFound);
+
+
+    public void ShowMessage()
+    {
+        Console.WriteLine();
+    }
 
 
     public void ShowMessage(string message, bool isLinebreakAdded = true)
