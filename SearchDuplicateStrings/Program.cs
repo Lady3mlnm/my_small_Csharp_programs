@@ -9,7 +9,7 @@ namespace SearchDuplicateStrings
         {
             try
             {
-                const string APPTITLE = "SearchDuplicateStrings v0.2.3";
+                const string APPTITLE = "SearchDuplicateStrings v0.2.4";
                 IRepository repository = new DiskRepository();
                 IUserInteraction userInteraction = new ConsoleUserInteraction(args, APPTITLE);
                 TextProcessingLogic textProcessingLogic = new TextProcessingLogic();

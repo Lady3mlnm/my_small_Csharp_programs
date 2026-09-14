@@ -1,4 +1,5 @@
 ﻿using SearchDuplicateStrings.DataAccess;
+using System.Text;
 
 namespace SearchDuplicateStrings.App;
 
@@ -11,6 +12,7 @@ public class ConsoleUserInteraction : IUserInteraction
     public ConsoleUserInteraction(string[] args, string appTitle = "TextToHexConverter")
     {
         Console.Title = appTitle;
+        Console.OutputEncoding = Encoding.Unicode;
 
         try {
             _pathFileInput = args[0];
