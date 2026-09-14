@@ -2,4 +2,4 @@ This is my curriculum program for extraction and aggregation data from PDFs for 
 
 I adopted the structural model from the previous course assignments and borrowed some pieces of code from the course, but overall, the code is mine.
 
-![screenshot of the program](screenshots/TicketsDataAggregator)
+![screenshot of the program](./screenshots/TicketsDataAggregator.png)

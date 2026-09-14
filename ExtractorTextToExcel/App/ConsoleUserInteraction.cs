@@ -32,6 +32,7 @@ public class ConsoleUserInteraction : IUserInteraction
     public ConsoleUserInteraction(string[] args, string appTitle = "ExtractorExcelToText")
     {
         Console.Title = appTitle;
+        Console.OutputEncoding = Encoding.Unicode;
 
         var options = ParseArguments(args);
 
