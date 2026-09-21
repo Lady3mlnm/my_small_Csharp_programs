@@ -4,7 +4,7 @@ namespace TicketsDataAggregator.DataAccess;
 
 public interface INotesOutput
 {
-    void ShowMessage(string message = "");
+    void ShowMessage(string message);
     void ShowTickets(IEnumerable<Ticket> tickets, bool isInvariantCulture=false);
     void ShowTicket(Ticket ticket, bool isInvariantCulture=false);
 }

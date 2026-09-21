@@ -31,7 +31,7 @@ public class TicketsDataAggregatorApp
 
     public void Run()
     {
-        string[] ticketDocuments = _ticketsReader.GetArrayDocumentsInStorage(_targetFolder);
+        string[] ticketDocuments = _ticketsReader.GetDocumentsInStorage(_targetFolder);
 
         bool startAggregation = true;
         foreach (string ticketDocument in ticketDocuments) {
@@ -44,19 +44,19 @@ public class TicketsDataAggregatorApp
                 sitePattern: @"(?<=Visit us:)[\w\.]*$");
             _notesOutput.ShowMessage("culture: " + culture);
 
-            Ticket[] arTickets = _ticketsAnalyzer.ExtractTicketsFromText(
+            Ticket[] tickets = _ticketsAnalyzer.ExtractTicketsFromText(
                 textDocument,
                 ticketPattern: @"Title:(?<title>.*?)Date:(?<date>.*?)Time:(?<time>.*?)(?=Title:|Visit us:)",
                 culture);
-            _notesOutput.ShowMessage("number of tickets: " + arTickets.Length);
-            _notesOutput.ShowTickets(arTickets, isInvariantCulture: true);
+            _notesOutput.ShowMessage("number of tickets: " + tickets.Length);
+            _notesOutput.ShowTickets(tickets, isInvariantCulture: true);
 
-            _resultWriter.WriteTickets(arTickets, _outputFile, newFile: startAggregation);
+            _resultWriter.WriteTickets(tickets, _outputFile, createNewFile: startAggregation);
             Console.WriteLine($"Tickets are {(startAggregation ? "written" : "appended")} to file " + _outputFile);
             if (startAggregation)
                 startAggregation = false;
 
-            _notesOutput.ShowMessage();
+            _notesOutput.ShowMessage("");
         }
     }
 }

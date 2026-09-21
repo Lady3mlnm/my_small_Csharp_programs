@@ -4,11 +4,10 @@ namespace TicketsDataAggregator.DataAccess;
 
 public class TicketsFromPdfsReader : ITicketsReader
 {
-    public string[] GetArrayDocumentsInStorage(string folderPath)
+    public string[] GetDocumentsInStorage(string folderPath)
     {
         return Directory.GetFiles(folderPath, "*.pdf");
     }
-
 
     public string ReadDocument(string pdfPath)
     {

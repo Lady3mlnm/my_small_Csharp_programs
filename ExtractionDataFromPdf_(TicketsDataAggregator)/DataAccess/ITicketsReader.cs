@@ -2,7 +2,7 @@
 
 public interface ITicketsReader
 {
-    string[] GetArrayDocumentsInStorage(string folderPath);
+    string[] GetDocumentsInStorage(string folderPath);
 
     string ReadDocument(string documentPath);
 }

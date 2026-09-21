@@ -4,18 +4,16 @@ namespace TicketsDataAggregator.DataAccess;
 
 public class NotesToConsoleOutput : INotesOutput
 {
-    public void ShowMessage(string message = "")
+    public void ShowMessage(string message)
     {
         Console.WriteLine(message);
     }
-
 
     public void ShowTickets(IEnumerable<Ticket> tickets, bool isInvariantCulture=false)
     {
         foreach (Ticket ticket in tickets)
             ShowTicket(ticket, isInvariantCulture);
     }
-
 
     public void ShowTicket(Ticket ticket, bool isInvariantCulture=false)
     {

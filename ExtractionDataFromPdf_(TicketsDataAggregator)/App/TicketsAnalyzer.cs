@@ -12,7 +12,6 @@ public class TicketsAnalyzer : ITicketsAnalyzer
         ["jp"]  = new CultureInfo("jp-JP")
     };
 
-
     public CultureInfo ExtractCultureFromText(string textDocument, string sitePattern)
     {
         Match matchSite = Regex.Match(textDocument, sitePattern);
@@ -24,7 +23,6 @@ public class TicketsAnalyzer : ITicketsAnalyzer
         CultureInfo culture = _domainToCultureMapping[siteExtension];
         return culture;
     }
-
 
     public Ticket[] ExtractTicketsFromText(string text, string ticketPattern, CultureInfo culture)
     {
