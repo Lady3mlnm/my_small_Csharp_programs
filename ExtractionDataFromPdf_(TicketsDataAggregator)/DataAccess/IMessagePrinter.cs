@@ -2,7 +2,7 @@
 
 namespace TicketsDataAggregator.DataAccess;
 
-public interface INotesOutput
+public interface IMessagePrinter
 {
     void ShowMessage(string message);
     void ShowTickets(IEnumerable<Ticket> tickets, bool isInvariantCulture=false);

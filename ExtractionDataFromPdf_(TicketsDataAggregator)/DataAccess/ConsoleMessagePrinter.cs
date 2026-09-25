@@ -2,7 +2,7 @@
 
 namespace TicketsDataAggregator.DataAccess;
 
-public class NotesToConsoleOutput : INotesOutput
+public class ConsoleMessagePrinter : IMessagePrinter
 {
     public void ShowMessage(string message)
     {

@@ -9,7 +9,7 @@ public class TicketsDataAggregatorApp
     private readonly ITicketsReader _ticketsReader;
     private readonly IResultWriter _resultWriter;
     private readonly ITicketsAnalyzer _ticketsAnalyzer;
-    private readonly INotesOutput _notesOutput;
+    private readonly IMessagePrinter _messagePrinter;
     private readonly string _targetFolder;
     private readonly string _outputFile;
 
@@ -17,14 +17,14 @@ public class TicketsDataAggregatorApp
         ITicketsReader ticketsReader,
         IResultWriter resultWriter,
         ITicketsAnalyzer ticketsAnalyzer,
-        INotesOutput notesOutput,
+        IMessagePrinter messagePrinter,
         string targetFolder,
         string outputFile)
     {
         _ticketsReader = ticketsReader;
         _resultWriter = resultWriter;
         _ticketsAnalyzer = ticketsAnalyzer;
-        _notesOutput = notesOutput;
+        _messagePrinter = messagePrinter;
         _targetFolder = targetFolder;
         _outputFile = outputFile;
     }
@@ -35,28 +35,28 @@ public class TicketsDataAggregatorApp
 
         bool startAggregation = true;
         foreach (string ticketDocument in ticketDocuments) {
-            _notesOutput.ShowMessage("processed document:" + ticketDocument);
+            _messagePrinter.ShowMessage("processed document:" + ticketDocument);
 
             string textDocument = _ticketsReader.ReadDocument(ticketDocument);
 
             CultureInfo culture = _ticketsAnalyzer.ExtractCultureFromText(
                 textDocument,
                 sitePattern: @"(?<=Visit us:)[\w\.]*$");
-            _notesOutput.ShowMessage("culture: " + culture);
+            _messagePrinter.ShowMessage("culture: " + culture);
 
             Ticket[] tickets = _ticketsAnalyzer.ExtractTicketsFromText(
                 textDocument,
                 ticketPattern: @"Title:(?<title>.*?)Date:(?<date>.*?)Time:(?<time>.*?)(?=Title:|Visit us:)",
                 culture);
-            _notesOutput.ShowMessage("number of tickets: " + tickets.Length);
-            _notesOutput.ShowTickets(tickets, isInvariantCulture: true);
+            _messagePrinter.ShowMessage("number of tickets: " + tickets.Length);
+            _messagePrinter.ShowTickets(tickets, isInvariantCulture: true);
 
             _resultWriter.WriteTickets(tickets, _outputFile, createNewFile: startAggregation);
             Console.WriteLine($"Tickets are {(startAggregation ? "written" : "appended")} to file " + _outputFile);
             if (startAggregation)
                 startAggregation = false;
 
-            _notesOutput.ShowMessage("");
+            _messagePrinter.ShowMessage("");
         }
     }
 }

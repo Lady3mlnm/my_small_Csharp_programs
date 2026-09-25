@@ -8,13 +8,13 @@ try {
     var ticketsReader = new TicketsFromPdfsReader();
     var resultWriter = new ResultToDiskWriter();
     var ticketsAnalyzer = new TicketsAnalyzer();
-    var notesOutput = new NotesToConsoleOutput();
+    var messagePrinter = new ConsoleMessagePrinter();
 
     new TicketsDataAggregatorApp(
         ticketsReader,
         resultWriter,
         ticketsAnalyzer,
-        notesOutput,
+        messagePrinter,
         targetFolder,
         outputFile).Run();
 } catch(Exception ex) {
